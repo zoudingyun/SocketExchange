@@ -8,38 +8,37 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 主功能线程池控制中心
+ * 服务分发线程池控制中心
  * @author zdy
  * */
 
 @Service
-public class WorkerThreadPoolCenter {
+public class ServerThreadPoolCenter {
     /**核心线程池大小*/
-    @Value("${workerThread.corePoolSize}")
+    @Value("${serverThread.corePoolSize}")
     int corePoolSize;
 
     /**最大线程池大小*/
-    @Value("${workerThread.maximumPoolSize}")
+    @Value("${serverThread.maximumPoolSize}")
     int maximumPoolSize;
 
     /**线程最大空闲时间*/
-    @Value("${workerThread.keepAliveTime}")
+    @Value("${serverThread.keepAliveTime}")
     long keepAliveTime;
 
     /**时间单位*/
     TimeUnit unit = TimeUnit.SECONDS;
 
     /**线程等待队列*/
-    @Value("${workerThread.workQueue}")
-    int workQueueNum;
-
+    @Value("${serverThread.workQueue}")
+     int workQueueNum;
 
 
     /**线程创建工厂*/
-    ThreadFactory threadFactory = new WorkerThreadPoolCenter.NameTreadFactory();
+    ThreadFactory threadFactory = new NameTreadFactory();
 
     /**拒绝策略*/
-    RejectedExecutionHandler handler = new WorkerThreadPoolCenter.MyIgnorePolicy();
+    RejectedExecutionHandler handler = new MyIgnorePolicy();
 
     /**线程池*/
     ThreadPoolExecutor executor;

@@ -2,6 +2,7 @@ package per.zdy.socketexchange.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import per.zdy.socketexchange.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchange.threadPool.WorkerThreadPoolCenter;
 
 import javax.annotation.PostConstruct;
@@ -14,13 +15,13 @@ import javax.annotation.PostConstruct;
 public class ServerTask {
 
     @Autowired
-    WorkerThreadPoolCenter workerThreadPoolCenter;
+    WorkerThreadPoolCenter serverThreadPoolCenter;
 
     @PostConstruct
     public void run(){
         for (int i = 1; i <= 10; i++) {
             MyTask myTask = new MyTask(String.valueOf(i));
-            workerThreadPoolCenter.newThread(myTask);
+            serverThreadPoolCenter.newThread(myTask);
         }
 
 
