@@ -20,12 +20,12 @@ public class Socket2SocketWorker implements Runnable {
     public void run() {
         try {
             LogFactory.get().info("worker thread created!");
-            //根据输入输出流和服务端连接//获取一个输出流，向服务端发送信息
+            //获取输入流，接受客户端请求
             OutputStream outputStream=requestSocket.getOutputStream();
+            //获取一个输出流，向服务端发送信息
             InputStream inputStream = targetSocket.getInputStream();
-
+            byte[] temp = new byte[10240];
             while (true){
-                byte[] temp = new byte[10240];
                 int ret =inputStream.read(temp);
                 outputStream.write(temp,0,ret);
                 outputStream.flush();
