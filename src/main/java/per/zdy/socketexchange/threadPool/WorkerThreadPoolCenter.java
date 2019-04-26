@@ -1,5 +1,6 @@
 package per.zdy.socketexchange.threadPool;
 
+import cn.hutool.log.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +46,12 @@ public class WorkerThreadPoolCenter {
     ThreadPoolExecutor executor;
 
 
-    @PostConstruct
     public void threadPoolCreate() throws Exception {
         BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(workQueueNum);
         executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit,
                 workQueue, threadFactory, handler);
         //executor.prestartAllCoreThreads(); // 预启动所有核心线程
+        LogFactory.get().info(">>>workerThreadPool Initialization complete.<<<");
     }
 
     public void newThread(Runnable command){
@@ -76,6 +77,7 @@ public class WorkerThreadPoolCenter {
 
      class MyIgnorePolicy implements RejectedExecutionHandler {
 
+        @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
             doLog(r, e);
         }
