@@ -9,8 +9,13 @@ public interface ServerCenterService  {
     public void server(int port);
 
     /**
-     * 获取线程池活动线程数
+     * 获取服务台线程池活动线程数
      * */
-    public int queryActiveThreadCount();
+    public int queryServerActiveThreadCount();
+
+    /**
+     * 获取工作线程池活动线程数
+     * */
+    public int queryWorkerActiveThreadCount();
 
 }

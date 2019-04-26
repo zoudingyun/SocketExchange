@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ServerCenterController {
 
     @RequestMapping("/")
-    public String helloHtml() {
+    public String indexHtml() {
         return "/html/index.html";
     }
 

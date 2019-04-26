@@ -63,6 +63,11 @@ public class WorkerThreadPoolCenter {
         }
     }
 
+    /**活跃线程数*/
+    public int queryActiveThreadCount(){
+        return executor.getActiveCount();
+    }
+
     class NameTreadFactory implements ThreadFactory {
 
         private final AtomicInteger mThreadNum = new AtomicInteger(1);

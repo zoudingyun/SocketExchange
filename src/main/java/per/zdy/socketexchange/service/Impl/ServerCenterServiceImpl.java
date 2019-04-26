@@ -18,6 +18,9 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Autowired
     ServerThreadPoolCenter serverThreadPoolCenter;
 
+    @Autowired
+    WorkerThreadPoolCenter workerThreadPoolCenter;
+
     @Override
     public void server(int port){
         try {
@@ -29,7 +32,12 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     }
 
     @Override
-    public int queryActiveThreadCount(){
+    public int queryServerActiveThreadCount(){
         return serverThreadPoolCenter.queryActiveThreadCount();
+    }
+
+    @Override
+    public int queryWorkerActiveThreadCount(){
+        return workerThreadPoolCenter.queryActiveThreadCount();
     }
 }
