@@ -9,17 +9,17 @@ import java.net.Socket;
 public class ServerDispatcher implements Runnable {
 
     Socket requestSocket;
-    int num=0;
+    Socket targetSocket;
 
-    public ServerDispatcher(int num,Socket requestSocket) {
+    public ServerDispatcher(Socket requestSocket,Socket targetSocket) {
         this.requestSocket = requestSocket;
-        this.num= num;
+        this.targetSocket = targetSocket;
     }
 
     @Override
     public void run() {
         try{
-            System.out.println("Socket is running!"+num);
+            System.out.println("Socket is running!");
             Thread.sleep(5000);
 
         }catch (Exception ex){

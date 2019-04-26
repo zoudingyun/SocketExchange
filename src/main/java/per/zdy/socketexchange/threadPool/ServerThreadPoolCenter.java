@@ -74,7 +74,7 @@ public class ServerThreadPoolCenter {
         @Override
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r, "my-thread-" + mThreadNum.getAndIncrement());
-            System.out.println(t.getName() + " has been created");
+            //System.out.println(t.getName() + " has been created");
             return t;
         }
     }
@@ -87,9 +87,9 @@ public class ServerThreadPoolCenter {
         }
 
         private void doLog(Runnable r, ThreadPoolExecutor e) {
-            // 可做日志记录等
-            System.err.println( r.toString() + " rejected");
-//          System.out.println("completedTaskCount: " + e.getCompletedTaskCount());
+            // 可做日志记录等抛弃线程请求
+            LogFactory.get().error( r.toString() + " rejected");
+            //System.out.println("completedTaskCount: " + e.getCompletedTaskCount());
         }
     }
 

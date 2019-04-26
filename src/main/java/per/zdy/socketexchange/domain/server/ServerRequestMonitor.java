@@ -1,8 +1,11 @@
 package per.zdy.socketexchange.domain.server;
 
+import cn.hutool.log.LogFactory;
 import per.zdy.socketexchange.threadPool.ServerThreadPoolCenter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static per.zdy.socketexchange.share.PublicVariable.socketServerOnline;
 
 /**
  * 负责监听新用户连接并分发用户请求至子线程
@@ -24,15 +27,18 @@ public class ServerRequestMonitor implements Runnable {
         try {
             //监听服务端口
             ServerSocket serverSocket=new ServerSocket(port);
+            socketServerOnline=true;
             while (true) {
                 Socket ssocket = serverSocket.accept();
-                for (int i = 1; i <= 10; i++) {
-                    ServerDispatcher myTask = new ServerDispatcher(i,ssocket);
-                    serverThreadPoolCenter.newThread(myTask);
+                if (!socketServerOnline){
+                    break;
                 }
+
+                ServerDispatcher myTask = new ServerDispatcher(ssocket,new Socket("172.30.200.50",3389));
+                serverThreadPoolCenter.newThread(myTask);
             }
         }catch (Exception ex){
-
+            LogFactory.get().error(ex);
         }
     }
 
