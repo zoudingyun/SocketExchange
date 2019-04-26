@@ -2,6 +2,8 @@ package per.zdy.socketexchange.domain.server;
 
 import cn.hutool.log.LogFactory;
 import per.zdy.socketexchange.threadPool.ServerThreadPoolCenter;
+import per.zdy.socketexchange.threadPool.WorkerThreadPoolCenter;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -16,10 +18,12 @@ public class ServerRequestMonitor implements Runnable {
 
     int port=0;
     ServerThreadPoolCenter serverThreadPoolCenter;
+    WorkerThreadPoolCenter workerThreadPoolCenter;
 
-    public ServerRequestMonitor(int port,ServerThreadPoolCenter serverThreadPoolCenter){
+    public ServerRequestMonitor(int port, ServerThreadPoolCenter serverThreadPoolCenter,WorkerThreadPoolCenter workerThreadPoolCenter){
         this.port=port;
         this.serverThreadPoolCenter = serverThreadPoolCenter;
+        this.workerThreadPoolCenter = workerThreadPoolCenter;
     }
 
     @Override
@@ -33,9 +37,12 @@ public class ServerRequestMonitor implements Runnable {
                 if (!socketServerOnline){
                     break;
                 }
-
-                ServerDispatcher myTask = new ServerDispatcher(ssocket,new Socket("172.30.200.50",3389));
-                serverThreadPoolCenter.newThread(myTask);
+                try{
+                    ServerDispatcher myTask = new ServerDispatcher(ssocket,workerThreadPoolCenter);
+                    serverThreadPoolCenter.newThread(myTask);
+                }catch (Exception ex){
+                    LogFactory.get().error(ex);
+                }
             }
         }catch (Exception ex){
             LogFactory.get().error(ex);

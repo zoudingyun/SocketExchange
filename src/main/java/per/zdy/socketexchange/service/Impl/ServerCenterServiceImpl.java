@@ -24,7 +24,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Override
     public void server(int port){
         try {
-            ServerRequestMonitor serverRequestMonitor = new ServerRequestMonitor(port,serverThreadPoolCenter);
+            ServerRequestMonitor serverRequestMonitor = new ServerRequestMonitor(port,serverThreadPoolCenter,workerThreadPoolCenter);
             serverThreadPoolCenter.newThread(serverRequestMonitor);
         } catch (Exception e) {
             e.printStackTrace();

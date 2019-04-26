@@ -1,28 +1,45 @@
 package per.zdy.socketexchange.domain.worker;
 
-public class Socket2SocketWorker implements Runnable {
-    private String name;
+import cn.hutool.log.LogFactory;
 
-    public Socket2SocketWorker(String name) {
-        this.name = name;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+public class Socket2SocketWorker implements Runnable {
+
+    Socket requestSocket;
+    Socket targetSocket;
+
+    public Socket2SocketWorker(Socket requestSocket,Socket targetSocket) {
+        this.requestSocket = requestSocket;
+        this.targetSocket = targetSocket;
     }
 
     @Override
     public void run() {
         try {
-            System.out.println(this.toString() + " is running!");
-            Thread.sleep(3000); //让任务执行慢点
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            LogFactory.get().info("worker thread created!");
+            //根据输入输出流和服务端连接//获取一个输出流，向服务端发送信息
+            OutputStream outputStream=requestSocket.getOutputStream();
+            InputStream inputStream = targetSocket.getInputStream();
+
+            while (true){
+                byte[] temp = new byte[10240];
+                int ret =inputStream.read(temp);
+                outputStream.write(temp,0,ret);
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            LogFactory.get().info("worker thread exit!");
+            try {
+                requestSocket.close();
+                targetSocket.close();
+            }catch (Exception ex){
+                LogFactory.get().error(ex);
+            }
+
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "MyTask [name=" + name + "]";
-    }
 }
