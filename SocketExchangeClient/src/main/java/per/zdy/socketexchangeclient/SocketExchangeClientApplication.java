@@ -2,9 +2,13 @@ package per.zdy.socketexchangeclient;
 
 
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import per.zdy.socketexchangeclient.domain.JavaTest;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +38,21 @@ public class SocketExchangeClientApplication {
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
         browser.loadURL(url);
+        browser.addLoadListener(new LoadAdapter() {
+            @Override
+            public void onFinishLoadingFrame(FinishLoadingEvent event) {
+                super.onFinishLoadingFrame(event);
+                if (event.isMainFrame()) {
+                    //browser.executeJavaScript("alert('java調用了js')");
+
+                    JSValue window = browser.executeJavaScriptAndReturnValue("window");
+                    // 给jswindows对象添加一个扩展的属性
+                    JavaTest javaObject = new JavaTest();
+                    window.asObject().setProperty("javaTest", javaObject);
+                }
+            }
+        });
+
 
     }
 

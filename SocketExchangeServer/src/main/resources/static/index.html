@@ -50,11 +50,22 @@
 					//return;
 					}
 			}
+			
+			function exeJava(){
+				try
+				 {
+					javaTest.alert('111');
+				 }
+				 catch(e)
+				 {
+					alert(e);
+				 }
+			 }
 			 
 
         </script>
     </head>
-    <body class="index" onload="onload()">
+    <body class="index" onclick="exeJava()" >
         <!-- 顶部开始 -->
         <div class="container">
             <div class="logo">
