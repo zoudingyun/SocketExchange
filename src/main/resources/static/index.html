@@ -20,9 +20,41 @@
         <script>
             // 是否开启刷新记忆tab功能
             // var is_remember = false;
+			function onload(){
+				var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+				var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+				var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+				var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+				if(isIE) {
+				    var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+				    reIE.test(userAgent);
+				    var fIEVersion = parseFloat(RegExp["$1"]);
+				    if(fIEVersion == 7) {
+				          alert(7);
+				    } else if(fIEVersion == 8) {
+				        alert(8);
+				    } else if(fIEVersion == 9) {
+				        alert(9);
+				    } else if(fIEVersion == 10) {
+				        alert(10);
+				    } else {
+				        alert(6);//IE版本<=7
+						//return;
+				    }   
+				} else if(isEdge) {
+				    alert('edge');//edge
+				} else if(isIE11) {
+				    alert(11); //IE11  
+				}else{
+				    alert(-1);//不是ie浏览器
+					//return;
+					}
+			}
+			 
+
         </script>
     </head>
-    <body class="index">
+    <body class="index" onload="onload()">
         <!-- 顶部开始 -->
         <div class="container">
             <div class="logo">
