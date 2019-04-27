@@ -1,10 +1,14 @@
 package per.zdy.socketexchangeclient;
 
+
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.swing.*;
 import java.awt.*;
+
 
 @SpringBootApplication
 public class SocketExchangeClientApplication {
@@ -14,16 +18,22 @@ public class SocketExchangeClientApplication {
         System.setProperty("java.awt.headless","false");
         SpringApplication.run(SocketExchangeClientApplication.class, args);
 
+        final String url = "http://127.0.0.1:8848/static/index.html";
+        final String title = "物资网";
+        Browser browser = new Browser();
+        BrowserView view = new BrowserView(browser);
+
         JFrame frame = new JFrame();
         frame.setSize(800 , 600);
         //禁用close功能
         //frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //不显示标题栏,最大化,最小化,退出按钮
         //frame.setUndecorated(true);
-        //frame.add(view, BorderLayout.CENTER);
+        frame.add(view, BorderLayout.CENTER);
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
+        browser.loadURL(url);
 
     }
 
