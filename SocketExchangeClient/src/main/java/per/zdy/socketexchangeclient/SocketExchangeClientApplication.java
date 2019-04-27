@@ -23,17 +23,20 @@ public class SocketExchangeClientApplication {
         SpringApplication.run(SocketExchangeClientApplication.class, args);
 
         final String url = "http://127.0.0.1:8848/static/index.html";
-        final String title = "物资网";
+        final String title = "SocketExchange";
         Browser browser = new Browser();
         BrowserView view = new BrowserView(browser);
 
         JFrame frame = new JFrame();
         frame.setSize(800 , 600);
+
+
         //禁用close功能
-        //frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //不显示标题栏,最大化,最小化,退出按钮
         //frame.setUndecorated(true);
         frame.add(view, BorderLayout.CENTER);
+
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
