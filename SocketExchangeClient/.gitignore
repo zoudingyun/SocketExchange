@@ -1,5 +1,5 @@
 HELP.md
-/SocketExchangeServer/target/
+/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -27,9 +27,3 @@ HELP.md
 
 ### VS Code ###
 .vscode/
-
-SocketExchangeClient/mvnw
-
-SocketExchangeClient/mvnw\.cmd
-
-SocketExchangeClient/\.mvn/wrapper/
