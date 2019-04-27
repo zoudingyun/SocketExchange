@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>per.zdy</groupId>
-    <artifactId>socket-exchange</artifactId>
+    <artifactId>socket-exchange-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>socket-exchange</name>
     <description>Demo project for Spring Boot</description>
