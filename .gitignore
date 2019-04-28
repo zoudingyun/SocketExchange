@@ -33,3 +33,7 @@ SocketExchangeClient/mvnw
 SocketExchangeClient/mvnw\.cmd
 
 SocketExchangeClient/\.mvn/wrapper/
+
+target/classes/
+
+*.class
