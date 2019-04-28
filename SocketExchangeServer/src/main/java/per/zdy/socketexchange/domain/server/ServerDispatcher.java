@@ -26,7 +26,7 @@ public class ServerDispatcher implements Runnable {
     @Override
     public void run() {
         try{
-            Socket targetSocket = new Socket("joinv.cn",22);
+            Socket targetSocket = new Socket("10.80.48.144",61616);
 
             Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket);
             workerThreadPoolCenter.newThread(socket2SocketWorker);
