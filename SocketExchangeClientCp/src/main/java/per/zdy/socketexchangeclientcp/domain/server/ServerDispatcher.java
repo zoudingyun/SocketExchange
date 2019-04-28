@@ -31,8 +31,8 @@ public class ServerDispatcher implements Runnable {
         try{
             Socket targetSocket = new Socket("127.0.0.1",10086);
             RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
-            requestInfoPojo.setTargetIp("172.30.200.51");
-            requestInfoPojo.setTargetPort(3389);
+            requestInfoPojo.setTargetIp("joinv.cn");
+            requestInfoPojo.setTargetPort(22);
             requestInfoPojo.setUserName("zdy");
             requestInfoPojo.setUserPwd("123456");
             JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);

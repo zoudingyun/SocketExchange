@@ -24,8 +24,7 @@ public class ServerTask {
     @Autowired
     WorkerThreadPoolCenter workerThreadPoolCenter;
 
-    @Autowired
-    ServerCenterService serverCenterService;
+
 
 
     @Value("${socketPort}")
@@ -38,9 +37,6 @@ public class ServerTask {
             //初始化线程池
             serverThreadPoolCenter.threadPoolCreate();
             workerThreadPoolCenter.threadPoolCreate();
-
-            //启动监听服务
-            serverCenterService.server(port);
         }catch (Exception ex){
             LogFactory.get().error(ex);
         }

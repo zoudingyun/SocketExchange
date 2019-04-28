@@ -1,5 +1,10 @@
 package per.zdy.socketexchangeclientcp.share;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import per.zdy.socketexchangeclientcp.domain.Pojo.RequestInfoPojo;
+import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
+
 public class PublicVariable {
     public static Boolean socketServerOnline = false;
 
@@ -8,5 +13,22 @@ public class PublicVariable {
         System.arraycopy(a, 0, c, 0, a.length);
         System.arraycopy(b, 0, c, a.length, b.length);
         return c;
+    }
+
+
+    public static ReturnPojo getJsonSuccess(){
+        ReturnPojo returnPojo = new ReturnPojo();
+        returnPojo.setCode(200);
+        returnPojo.setMessage("success");
+
+        return returnPojo;
+    }
+
+    public static ReturnPojo getJsonFailed(){
+        ReturnPojo returnPojo = new ReturnPojo();
+        returnPojo.setCode(500);
+        returnPojo.setMessage("failed");
+
+        return returnPojo;
     }
 }
