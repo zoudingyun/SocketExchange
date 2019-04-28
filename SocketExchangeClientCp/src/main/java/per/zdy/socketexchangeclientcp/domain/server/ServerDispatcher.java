@@ -1,10 +1,8 @@
-package per.zdy.socketexchange.domain.server;
+package per.zdy.socketexchangeclientcp.domain.server;
 
-import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import per.zdy.socketexchange.domain.worker.Socket2SocketWorker;
-import per.zdy.socketexchange.threadPool.WorkerThreadPoolCenter;
+import per.zdy.socketexchangeclientcp.domain.worker.Socket2SocketWorker;
+import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
 import java.net.Socket;
 
@@ -28,6 +26,8 @@ public class ServerDispatcher implements Runnable {
     @Override
     public void run() {
         try{
+
+
             Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket);
             workerThreadPoolCenter.newThread(socket2SocketWorker);
             Socket2SocketWorker socket2SocketWorker2 = new Socket2SocketWorker(targetSocket,requestSocket);

@@ -8,6 +8,7 @@ public class SocketExchangeClientCpApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SocketExchangeClientCpApplication.class, args);
+
 	}
 
 }
