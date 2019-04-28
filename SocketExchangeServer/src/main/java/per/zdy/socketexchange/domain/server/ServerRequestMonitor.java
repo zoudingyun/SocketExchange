@@ -37,51 +37,16 @@ public class ServerRequestMonitor implements Runnable {
             ServerSocket serverSocket=new ServerSocket(port);
             while (true) {
                 try{
-                        socketServerOnline=true;
                         Socket ssocket = serverSocket.accept();
                         // 建立好连接后，从socket中获取输入流，并建立缓冲区进行读取
-                        InputStream inputStream = ssocket.getInputStream();
-                        OutputStream outputStream = ssocket.getOutputStream();
-                        byte[] bytes = new byte[10240];
-                        int len;
-                        StringBuilder sb = new StringBuilder();
-
-                        int ret = inputStream.read(bytes);
-                        sb.append(new String(bytes, 0, ret,"UTF-8"));
-
-                        //接受到客户端的传参
-                        JSONObject jsonObject = JSONUtil.parseObj(sb);
-                        if (!jsonObject.get("targetIp").equals("")&&!jsonObject.get("targetPort").equals("")
-                                &&!jsonObject.get("userName").equals("")&&!jsonObject.get("userPwd").equals("")){
-                            try{
-                                Socket targetSocket = new Socket(jsonObject.get("targetIp").toString()
-                                        ,Integer.parseInt(jsonObject.get("targetPort").toString()));
-                                if (!socketServerOnline){
-                                    break;
-                                }
-                                ServerDispatcher myTask = new ServerDispatcher(ssocket,targetSocket,workerThreadPoolCenter);
-                                serverThreadPoolCenter.newThread(myTask);
-                                JSONObject reJsonObject = new JSONObject();
-                                reJsonObject.put("code","200");
-                                reJsonObject.put("message","ok");
-                                outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                                outputStream.flush();
-
-                            }catch (Exception ex){
-                                JSONObject reJsonObject = new JSONObject();
-                                reJsonObject.put("code","500");
-                                reJsonObject.put("message",ex);
-                                outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                                outputStream.flush();
-                            }
-                        }
+                        ServerDispatcher myTask = new ServerDispatcher(ssocket,workerThreadPoolCenter);
+                        serverThreadPoolCenter.newThread(myTask);
                 }
                 catch (Exception ex){
                     LogFactory.get().error(ex);
                 }
             }
         }catch (Exception ex){
-            socketServerOnline=false;
             LogFactory.get().error(ex);
         }
     }
