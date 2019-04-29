@@ -41,3 +41,5 @@ target/classes/
 SocketExchangeClientCp/mvnw
 
 *.cmd
+
+SocketExchangeClientCp/db/test\.mv\.db
