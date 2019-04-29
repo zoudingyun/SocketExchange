@@ -2,10 +2,16 @@ package per.zdy.socketexchangeclientcp.share;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import org.springframework.beans.factory.annotation.Value;
 import per.zdy.socketexchangeclientcp.domain.Pojo.RequestInfoPojo;
 import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
 
 public class PublicVariable {
+    //远程服务器地址
+    public static String remoteAddress;
+    //远程服务器端口
+    public static int remotePort;
+
     public static Boolean socketServerOnline = false;
 
     public static byte[] byteConcat(byte[] a, byte[] b) {

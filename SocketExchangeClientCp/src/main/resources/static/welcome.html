@@ -8,6 +8,7 @@
         <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
         <link rel="stylesheet" href="./css/font.css">
         <link rel="stylesheet" href="./css/xadmin.css">
+				<script src="common/host.js"></script>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -25,11 +26,20 @@
                             <blockquote class="layui-elem-quote">欢迎管理员：
                                 <span class="x-red">test</span>！系统时间:2018-04-25 20:50:53
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																系统状态：<span id='serverState' style="color: #FF5722;">OFFLINE</span>
-																&nbsp;&nbsp;
-																<button class="layui-btn" onclick="startServer()">
-																	<i class="layui-icon">&#xe679;</i>启动服务</button>
+																系统状态：<span id='serverState' style="color: #FF5722;width: 52px;">OFFLINE</span></br>
+																<button class="layui-btn" id="serverButtonOn" onclick="startServer()">
+																	<i class="layui-icon" id="statIcon">&#xe679;</i><span id="serverButton">启动服务</span></button>
+																<button class="layui-btn layui-btn-danger" style="display: none;" id="serverButtonIng" onclick="offServer()">
+																	<i class="layui-icon" id="statIcon">&#xe63d;</i><span id="serverButton">进行中</span></button>
+																<button class="layui-btn layui-btn-danger" style="display: none;" id="serverButtonOff" onclick="offServer()">
+																	<i class="layui-icon" id="statIcon">&#x1006;</i><span id="serverButton">关闭服务</span></button>
                             </blockquote>
+														<blockquote class="layui-elem-quote">配置项：
+																<button class="layui-btn layui-btn-normal" id="configUser" onclick="">
+																	<i class="layui-icon" id="statIcon">&#xe66f;</i><span id="serverButton">配置用户</span></button>
+																<button class="layui-btn layui-btn-normal" id="configUser" onclick="goUrl('member-list.html')">
+																	<i class="layui-icon" id="statIcon">&#xe609;</i><span id="serverButton">配置通道</span></button>
+														</blockquote>
                         </div>
                     </div>
                 </div>
@@ -40,44 +50,44 @@
                             <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>文章数</h3>
+                                        <h3>配置通道数</h3>
                                         <p>
-                                            <cite>66</cite></p>
+                                            <cite>16</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>会员数</h3>
-                                        <p>
-                                            <cite>12</cite></p>
-                                    </a>
-                                </li>
-                                <li class="layui-col-md2 layui-col-xs6">
-                                    <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>回复数</h3>
+                                        <h3>工作线程池总数</h3>
                                         <p>
                                             <cite>99</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>商品数</h3>
+                                        <h3>已使用工作线程数</h3>
                                         <p>
-                                            <cite>67</cite></p>
+                                            <cite>12</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>文章数</h3>
+                                        <h3>服务线程池总数</h3>
                                         <p>
-                                            <cite>67</cite></p>
+                                            <cite>6</cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>已使用服务线程数</h3>
+                                        <p>
+                                            <cite>2</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6 ">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>文章数</h3>
+                                        <h3>正在使用的通道</h3>
                                         <p>
-                                            <cite>6766</cite></p>
+                                            <cite>--</cite></p>
                                     </a>
                                 </li>
                             </ul>
@@ -143,11 +153,11 @@
                             <table class="layui-table">
                                 <tbody>
                                     <tr>
-                                        <th>xxx版本</th>
-                                        <td>1.0.180420</td></tr>
+                                        <th>SocketExchangeClient版本</th>
+                                        <td>1.0.0</td></tr>
                                     <tr>
                                         <th>服务器地址</th>
-                                        <td>x.xuebingsi.com</td></tr>
+                                        <td>http://127.0.0.1:234</td></tr>
                                     <tr>
                                         <th>操作系统</th>
                                         <td>WINNT</td></tr>

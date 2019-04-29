@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.remoteAddress;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.remotePort;
+
 /**
  * 负责处理用户请求，并根据请求类型新建
  * @author ZDY
@@ -29,10 +32,10 @@ public class ServerDispatcher implements Runnable {
     @Override
     public void run() {
         try{
-            Socket targetSocket = new Socket("127.0.0.1",10086);
+            Socket targetSocket = new Socket(remoteAddress,remotePort);
             RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
-            requestInfoPojo.setTargetIp("joinv.cn");
-            requestInfoPojo.setTargetPort(22);
+            requestInfoPojo.setTargetIp("10.80.48.19");
+            requestInfoPojo.setTargetPort(3389);
             requestInfoPojo.setUserName("zdy");
             requestInfoPojo.setUserPwd("123456");
             JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
