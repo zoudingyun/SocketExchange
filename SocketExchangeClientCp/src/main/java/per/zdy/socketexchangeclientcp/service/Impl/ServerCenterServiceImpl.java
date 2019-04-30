@@ -3,6 +3,8 @@ package per.zdy.socketexchangeclientcp.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
+import per.zdy.socketexchangeclientcp.domain.dao.PassListDao;
 import per.zdy.socketexchangeclientcp.domain.server.ServerRequestMonitor;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
@@ -16,6 +18,9 @@ public class ServerCenterServiceImpl implements ServerCenterService {
 
     @Autowired
     WorkerThreadPoolCenter workerThreadPoolCenter;
+
+    @Autowired
+    PassListDao passListDao;
 
     @Override
     public void server(int port){
@@ -35,5 +40,10 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Override
     public int queryWorkerActiveThreadCount(){
         return workerThreadPoolCenter.queryActiveThreadCount();
+    }
+
+    @Override
+    public PassList save(PassList passList){
+        return passListDao.save(passList);
     }
 }

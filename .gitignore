@@ -43,3 +43,7 @@ SocketExchangeClientCp/mvnw
 *.cmd
 
 SocketExchangeClientCp/db/test\.mv\.db
+
+SocketExchangeClientCp/db/
+
+SocketExchangeClientCp/logs/

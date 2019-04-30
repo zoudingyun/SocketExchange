@@ -1,16 +1,12 @@
 package per.zdy.socketexchangeclientcp.web;
 
-import cn.hutool.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import per.zdy.socketexchangeclientcp.domain.Pojo.PassPojo;
-import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
+import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
 import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.share.ResultGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -59,8 +55,11 @@ public class ServerCenterController {
      * */
     @PostMapping("/uploadPass")
     @CrossOrigin
-    public Result uploadPass(@RequestBody List<PassPojo> passPojo) {
+    public Result uploadPass(@RequestBody List<PassList> passPojo) {
         try{
+            for (PassList passList:passPojo){
+                serverCenterService.save(passList);
+            }
             return ResultGenerator.genSuccessResult();
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());

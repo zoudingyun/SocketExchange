@@ -1,5 +1,7 @@
 package per.zdy.socketexchangeclientcp.service;
 
+import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
+
 public interface ServerCenterService  {
 
     /**
@@ -17,5 +19,11 @@ public interface ServerCenterService  {
      * 获取工作线程池活动线程数
      * */
     public int queryWorkerActiveThreadCount();
+
+
+    /**
+     * 新增通道信息
+     * */
+    public PassList save(PassList passList);
 
 }
