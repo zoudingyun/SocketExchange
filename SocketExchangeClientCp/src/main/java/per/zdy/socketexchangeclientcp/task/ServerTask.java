@@ -27,6 +27,10 @@ public class ServerTask {
     @Autowired
     WorkerThreadPoolCenter workerThreadPoolCenter;
 
+    @Autowired
+    ServerCenterService serverCenterService;
+
+
     @Value("${server.remoteAddress}")
     public String address;
 

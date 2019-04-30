@@ -7,8 +7,11 @@ import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 import per.zdy.socketexchangeclientcp.domain.dao.PassListDao;
 import per.zdy.socketexchangeclientcp.domain.server.ServerRequestMonitor;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
+import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
+
+import java.util.List;
 
 @Service
 public class ServerCenterServiceImpl implements ServerCenterService {
@@ -43,7 +46,16 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     }
 
     @Override
-    public PassList save(PassList passList){
-        return passListDao.save(passList);
+    public void save(List<PassList> passLists){
+        passListDao.deleteHistoryAllPassList();
+        passListDao.updateHistoryAllPassList();
+        for (PassList passList:passLists){
+            passListDao.save(passList);
+        }
+    }
+
+    @Override
+    public List<PassList> queryPass(){
+        return passListDao.findAllPassList();
     }
 }

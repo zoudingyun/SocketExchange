@@ -34,7 +34,7 @@ public class ServerDispatcher implements Runnable {
         try{
             Socket targetSocket = new Socket(remoteAddress,remotePort);
             RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
-            requestInfoPojo.setTargetIp("10.80.48.19");
+            requestInfoPojo.setTargetIp("10.80.48.209");
             requestInfoPojo.setTargetPort(3389);
             requestInfoPojo.setUserName("zdy");
             requestInfoPojo.setUserPwd("123456");

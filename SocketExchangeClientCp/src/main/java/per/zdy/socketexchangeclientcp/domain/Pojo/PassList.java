@@ -7,8 +7,15 @@ import javax.persistence.*;
 public class PassList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    //??
     @Id
-    String agent;
+    private Long id;
+
+    @Column(nullable = false)
+    String agentAdd;
+
+    @Column(nullable = false)
+    String agentPort;
 
     @Column(nullable = false)
     String remoteAdd;
@@ -19,12 +26,39 @@ public class PassList {
     @Column(nullable = false)
     String type;
 
-    public String getAgent() {
-        return agent;
+    @Column(nullable = false)
+    int deleteFlag=0;
+
+    public int getDeleteFlag() {
+        return deleteFlag;
     }
 
-    public void setAgent(String agent) {
-        this.agent = agent;
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getAgentAdd() {
+        return agentAdd;
+    }
+
+    public void setAgentAdd(String agentAdd) {
+        this.agentAdd = agentAdd;
+    }
+
+    public String getAgentPort() {
+        return agentPort;
+    }
+
+    public void setAgentPort(String agentPort) {
+        this.agentPort = agentPort;
     }
 
     public String getRemoteAdd() {
@@ -54,7 +88,9 @@ public class PassList {
     @Override
     public String toString() {
         return "PassList{" +
-                "agent=" + agent +
+                "id=" + id +
+                ", agentAdd='" + agentAdd + '\'' +
+                ", agentPort='" + agentPort + '\'' +
                 ", remoteAdd='" + remoteAdd + '\'' +
                 ", remotePort='" + remotePort + '\'' +
                 ", type=" + type +

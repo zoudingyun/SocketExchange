@@ -2,6 +2,8 @@ package per.zdy.socketexchangeclientcp.service;
 
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 
+import java.util.List;
+
 public interface ServerCenterService  {
 
     /**
@@ -24,6 +26,11 @@ public interface ServerCenterService  {
     /**
      * 新增通道信息
      * */
-    public PassList save(PassList passList);
+    public void save(List<PassList> passList);
+
+    /**
+     * 查询通道信息
+     * */
+    public List<PassList> queryPass();
 
 }

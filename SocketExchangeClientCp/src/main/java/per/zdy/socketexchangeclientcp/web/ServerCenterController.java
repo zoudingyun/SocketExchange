@@ -57,10 +57,22 @@ public class ServerCenterController {
     @CrossOrigin
     public Result uploadPass(@RequestBody List<PassList> passPojo) {
         try{
-            for (PassList passList:passPojo){
-                serverCenterService.save(passList);
-            }
+            serverCenterService.save(passPojo);
             return ResultGenerator.genSuccessResult();
+        }catch (Exception ex){
+            return ResultGenerator.genFailResult(ex.getMessage());
+        }
+
+    }
+
+    /**
+     * 查询通道
+     * */
+    @PostMapping("/queryPass")
+    @CrossOrigin
+    public Result queryPass() {
+        try{
+            return ResultGenerator.genSuccessResult(serverCenterService.queryPass());
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());
         }
