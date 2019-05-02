@@ -11,6 +11,8 @@ import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,16 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Override
     public void closeServer(){
         serverState=false;
+        List<PassList> passLists = passListDao.findAllPassList();
+        for (PassList passList:passLists){
+            try {
+                Socket targetSocket = new Socket();
+                targetSocket.connect(new InetSocketAddress("127.0.0.1",Integer.parseInt(passList.getAgentPort())),500);
+                targetSocket.close();
+            }catch (Exception ex){
+                continue;
+            }
+        }
     }
 
     @Override
