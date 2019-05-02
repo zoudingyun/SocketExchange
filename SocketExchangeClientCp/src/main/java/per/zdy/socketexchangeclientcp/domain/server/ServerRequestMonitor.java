@@ -10,11 +10,11 @@ import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.byteConcat;
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.socketServerOnline;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.*;
 
 
 /**
@@ -27,26 +27,39 @@ public class ServerRequestMonitor implements Runnable {
     int port=0;
     ServerThreadPoolCenter serverThreadPoolCenter;
     WorkerThreadPoolCenter workerThreadPoolCenter;
+    String remoteAdd;
+    int remotePort;
 
-    public ServerRequestMonitor(int port, ServerThreadPoolCenter serverThreadPoolCenter,WorkerThreadPoolCenter workerThreadPoolCenter){
+    public ServerRequestMonitor(int port,String remoteAdd,int remotePort,ServerThreadPoolCenter serverThreadPoolCenter,WorkerThreadPoolCenter workerThreadPoolCenter){
         this.port=port;
         this.serverThreadPoolCenter = serverThreadPoolCenter;
         this.workerThreadPoolCenter = workerThreadPoolCenter;
+        this.remoteAdd = remoteAdd;
+        this.remotePort = remotePort;
     }
 
     @Override
     public void run(){
         try {
             //监听服务端口
-            ServerSocket serverSocket=new ServerSocket(port);
+            ServerSocket serverSocket=new ServerSocket();
+            //serverSocket.setReuseAddress(true);
+            serverSocket.bind(new InetSocketAddress(port));
             socketServerOnline=true;
+            Socket ssocket = new Socket();
             while (true) {
-                Socket ssocket = serverSocket.accept();
-                try{
-                    ServerDispatcher myTask = new ServerDispatcher(ssocket,workerThreadPoolCenter);
-                    serverThreadPoolCenter.newThread(myTask);
-                }catch (Exception ex){
-                    LogFactory.get().error(ex);
+                ssocket.setReuseAddress(true);
+                ssocket = serverSocket.accept();
+                if (serverState){
+                    try{
+                        ServerDispatcher myTask = new ServerDispatcher(ssocket,remoteAdd,remotePort,workerThreadPoolCenter);
+                        serverThreadPoolCenter.newThread(myTask);
+                    }catch (Exception ex){
+                        LogFactory.get().error(ex);
+                    }
+                }else {
+                    serverSocket.close();
+                    return;
                 }
             }
         }catch (Exception ex){

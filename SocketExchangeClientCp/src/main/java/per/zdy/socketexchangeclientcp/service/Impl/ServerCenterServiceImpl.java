@@ -11,7 +11,10 @@ import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverState;
 
 @Service
 public class ServerCenterServiceImpl implements ServerCenterService {
@@ -26,13 +29,40 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     PassListDao passListDao;
 
     @Override
-    public void server(int port){
-        try {
-            ServerRequestMonitor serverRequestMonitor = new ServerRequestMonitor(port,serverThreadPoolCenter,workerThreadPoolCenter);
-            serverThreadPoolCenter.newThread(serverRequestMonitor);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void server(){
+        //启动服务
+        serverState=true;
+        List<PassList> passLists = passListDao.findAllPassList();
+        if (passLists.size()>0){
+            List<PassList> errorPassList = new ArrayList<>();
+            for (PassList passList:passLists){
+                try {
+                    ServerRequestMonitor serverRequestMonitor =
+                            new ServerRequestMonitor(Integer.parseInt(passList.getAgentPort()),
+                                    passList.getRemoteAdd(),
+                                    Integer.parseInt(passList.getRemotePort()),
+                                    serverThreadPoolCenter,
+                                    workerThreadPoolCenter);
+                    serverThreadPoolCenter.newThread(serverRequestMonitor);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    errorPassList.add(passList);
+                }
+            }
+
+        }else {
+            try {
+                throw new Exception("no passLists!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+    }
+
+    @Override
+    public void closeServer(){
+        serverState=false;
     }
 
     @Override

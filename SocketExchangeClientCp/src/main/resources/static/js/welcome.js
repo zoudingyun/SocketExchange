@@ -51,7 +51,7 @@ function offServer(){
 	$.ajax( {
 				type: "POST",
 				contentType: "application/json",
-				url:baseAjaxURL + "/startServer",
+				url:baseAjaxURL + "/offServer",
 				data: "",//JSON.stringify(getQueryCondition()),
 				success:function(response) {
 					var a=0;

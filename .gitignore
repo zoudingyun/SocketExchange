@@ -47,3 +47,7 @@ SocketExchangeClientCp/db/test\.mv\.db
 SocketExchangeClientCp/db/
 
 SocketExchangeClientCp/logs/
+
+SocketExchangeServer/db/
+
+SocketExchangeServer/logs/

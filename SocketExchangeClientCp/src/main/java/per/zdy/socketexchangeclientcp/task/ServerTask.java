@@ -11,8 +11,8 @@ import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
 import javax.annotation.PostConstruct;
 
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.remoteAddress;
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.remotePort;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverAddress;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverPort;
 
 /**
  * 初始化服务
@@ -27,8 +27,6 @@ public class ServerTask {
     @Autowired
     WorkerThreadPoolCenter workerThreadPoolCenter;
 
-    @Autowired
-    ServerCenterService serverCenterService;
 
 
     @Value("${server.remoteAddress}")
@@ -51,8 +49,8 @@ public class ServerTask {
             workerThreadPoolCenter.threadPoolCreate();
 
             //初始化远端服务器配置
-            remoteAddress = address;
-            remotePort = port;
+            serverAddress = address;
+            serverPort = port;
         }catch (Exception ex){
             LogFactory.get().error(ex);
         }

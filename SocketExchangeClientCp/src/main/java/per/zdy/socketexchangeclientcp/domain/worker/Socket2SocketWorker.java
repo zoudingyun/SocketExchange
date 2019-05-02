@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverState;
+
 public class Socket2SocketWorker implements Runnable {
 
     Socket requestSocket;
     Socket targetSocket;
-    Boolean firstTime = true;
 
     public Socket2SocketWorker(Socket requestSocket,Socket targetSocket) {
         this.requestSocket = requestSocket;
@@ -28,14 +29,18 @@ public class Socket2SocketWorker implements Runnable {
             byte[] temp = new byte[10240];
             while (true){
                 int ret =inputStream.read(temp);
-                if (firstTime){
-                    if (ret==-1){
-                        continue;
+                if (serverState){
+                    outputStream.write(temp,0,ret);
+                    outputStream.flush();
+                }else {
+                    try {
+                        requestSocket.close();
+                        targetSocket.close();
+                    }catch (Exception ex){
+                        LogFactory.get().info("worker thread exit!");
                     }
+                    return;
                 }
-                firstTime=false;
-                outputStream.write(temp,0,ret);
-                outputStream.flush();
             }
         } catch (Exception e) {
             LogFactory.get().info("worker thread exit!:");

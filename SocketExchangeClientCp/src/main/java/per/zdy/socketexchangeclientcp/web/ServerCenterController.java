@@ -28,7 +28,7 @@ public class ServerCenterController {
     @CrossOrigin
     public Result startServer() {
         try{
-            //serverCenterService.server(10087);
+            serverCenterService.server();
             return ResultGenerator.genSuccessResult();
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());
@@ -41,8 +41,9 @@ public class ServerCenterController {
     @PostMapping("/offServer")
     @CrossOrigin
     public Result offServer() {
-        //serverCenterService.server(10087);
         try{
+            serverCenterService.closeServer();
+
             return ResultGenerator.genSuccessResult();
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());

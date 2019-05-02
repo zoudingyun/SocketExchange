@@ -1,4 +1,5 @@
 var AllData = [];
+var layer;
 
 function uploadPass(){
 	var datanow = hot.getData();
@@ -9,7 +10,13 @@ function uploadPass(){
 					url:baseAjaxURL + "/uploadPass",
 					data: JSON.stringify(formatPassList(datanow)),
 					success:function(response) {
-						var a=0;
+						if ( response.message== 'SUCCESS') {
+							layer.msg('更新成功！');
+						} else{
+							layer.msg('更新失败：'+response.message);
+							console.log(response.message);
+						}
+						 
 					}
 				}
 			);
@@ -33,6 +40,9 @@ function formatPassList(data){
 
 
 $(document).ready(function() {
+	layui.use('layer', function(){
+	  layer = layui.layer;
+	}); 
 	$.ajax( {
 				type: "POST",
 				contentType: "application/json",

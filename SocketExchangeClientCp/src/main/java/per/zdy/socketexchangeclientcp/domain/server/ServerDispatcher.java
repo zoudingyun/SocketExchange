@@ -11,8 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.remoteAddress;
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.remotePort;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.*;
 
 /**
  * 负责处理用户请求，并根据请求类型新建
@@ -23,51 +22,63 @@ public class ServerDispatcher implements Runnable {
     WorkerThreadPoolCenter workerThreadPoolCenter;
 
     Socket requestSocket;
+    String remoteAdd;
+    int remotePort;
 
-    public ServerDispatcher(Socket requestSocket,WorkerThreadPoolCenter workerThreadPoolCenter) {
+    public ServerDispatcher(Socket requestSocket,String remoteAdd,int remotePort,WorkerThreadPoolCenter workerThreadPoolCenter) {
         this.requestSocket = requestSocket;
         this.workerThreadPoolCenter = workerThreadPoolCenter;
+        this.remoteAdd = remoteAdd;
+        this.remotePort = remotePort;
     }
 
     @Override
     public void run() {
-        try{
-            Socket targetSocket = new Socket(remoteAddress,remotePort);
-            RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
-            requestInfoPojo.setTargetIp("10.80.48.209");
-            requestInfoPojo.setTargetPort(3389);
-            requestInfoPojo.setUserName("zdy");
-            requestInfoPojo.setUserPwd("123456");
-            JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
+        if (serverState){
+            try{
+                Socket targetSocket = new Socket(serverAddress,serverPort);
+                RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
+                requestInfoPojo.setTargetIp(remoteAdd);
+                requestInfoPojo.setTargetPort(remotePort);
+                requestInfoPojo.setUserName("zdy");
+                requestInfoPojo.setUserPwd("123456");
+                JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
 
-            OutputStream outputStream = targetSocket.getOutputStream();
-            byte[] send = (JSONUtil.toJsonStr(jsonObject)+'\n').getBytes("UTF-8");
-            outputStream.write(send,0,send.length);
-            outputStream.flush();
+                //向服务器发送定向请求
+                OutputStream outputStream = targetSocket.getOutputStream();
+                byte[] send = (JSONUtil.toJsonStr(jsonObject)+'\n').getBytes("UTF-8");
+                outputStream.write(send,0,send.length);
+                outputStream.flush();
 
-            byte[] bytes = new byte[10240];
-            StringBuilder sb = new StringBuilder();
-            InputStream inputStream = targetSocket.getInputStream();
-            int ret = inputStream.read(bytes);
-            sb.append(new String(bytes, 0, ret,"UTF-8"));
-            //接受服务器的返回
-            JSONObject reJsonObject = JSONUtil.parseObj(sb);
-            if(reJsonObject.get("code").equals("200")){
-                try{
-                    Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket);
-                    workerThreadPoolCenter.newThread(socket2SocketWorker);
-                    Socket2SocketWorker socket2SocketWorker2 = new Socket2SocketWorker(targetSocket,requestSocket);
-                    workerThreadPoolCenter.newThread(socket2SocketWorker2);
-                }catch (Exception ex){
-                    LogFactory.get().error(ex);
+                byte[] bytes = new byte[10240];
+                StringBuilder sb = new StringBuilder();
+                InputStream inputStream = targetSocket.getInputStream();
+                int ret = inputStream.read(bytes);
+                sb.append(new String(bytes, 0, ret,"UTF-8"));
+                //接受服务器的返回
+                JSONObject reJsonObject = JSONUtil.parseObj(sb);
+                if(reJsonObject.get("code").equals("200")){
+                    try{
+                        Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket);
+                        workerThreadPoolCenter.newThread(socket2SocketWorker);
+                        Socket2SocketWorker socket2SocketWorker2 = new Socket2SocketWorker(targetSocket,requestSocket);
+                        workerThreadPoolCenter.newThread(socket2SocketWorker2);
+                    }catch (Exception ex){
+                        LogFactory.get().error(ex);
+                    }
+                }else {
+                    LogFactory.get().error(reJsonObject.getStr("message"));
                 }
-            }else {
-                LogFactory.get().error(reJsonObject.getStr("message"));
+            }catch (Exception ex){
+                LogFactory.get().error(ex);
             }
+        }else {
+            try{
+                requestSocket.close();
+            }catch (Exception ex){
 
-
-        }catch (Exception ex){
-            LogFactory.get().error(ex);
+            }
+            return;
         }
     }
 }

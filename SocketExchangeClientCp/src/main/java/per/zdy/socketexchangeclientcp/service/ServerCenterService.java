@@ -7,10 +7,14 @@ import java.util.List;
 public interface ServerCenterService  {
 
     /**
-     * 服务入口，接受新的用户请求
-     * @param port 监听端口
+     * 启动服务
      * */
-    public void server(int port);
+    public void server();
+
+    /**
+     * 关闭服务
+     * */
+    public void closeServer();
 
     /**
      * 获取服务台线程池活动线程数

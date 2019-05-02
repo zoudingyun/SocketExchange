@@ -62,6 +62,14 @@ public class ServerThreadPoolCenter {
         }
     }
 
+    public void shutdownThread(){
+        executor.shutdownNow();
+    }
+
+    public boolean removeTask(Runnable task){
+        return executor.remove(task);
+    }
+
     /**活跃线程数*/
     public int queryActiveThreadCount(){
         return executor.getActiveCount();

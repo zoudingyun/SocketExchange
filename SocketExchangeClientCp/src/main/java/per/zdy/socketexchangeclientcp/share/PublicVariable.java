@@ -1,16 +1,15 @@
 package per.zdy.socketexchangeclientcp.share;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import org.springframework.beans.factory.annotation.Value;
-import per.zdy.socketexchangeclientcp.domain.Pojo.RequestInfoPojo;
 import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
 
 public class PublicVariable {
     //远程服务器地址
-    public static String remoteAddress;
+    public static String serverAddress;
     //远程服务器端口
-    public static int remotePort;
+    public static int serverPort;
+
+    //本地监听服务启动状态（true启动，false关闭）
+    public static Boolean serverState = false;
 
     public static Boolean socketServerOnline = false;
 

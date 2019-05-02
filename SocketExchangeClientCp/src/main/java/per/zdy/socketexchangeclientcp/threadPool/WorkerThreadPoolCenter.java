@@ -4,6 +4,7 @@ import cn.hutool.log.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,6 +61,17 @@ public class WorkerThreadPoolCenter {
         else {
             executor.execute(command);
         }
+    }
+
+    public void shutdownThread(){
+        List<Runnable> lists = executor.shutdownNow();
+        for (Runnable list:lists){
+            executor.remove(list);
+        }
+    }
+
+    public boolean removeTask(Runnable task){
+        return executor.remove(task);
     }
 
     /**活跃线程数*/
