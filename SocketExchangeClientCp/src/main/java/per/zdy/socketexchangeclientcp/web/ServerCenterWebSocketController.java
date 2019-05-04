@@ -1,9 +1,13 @@
 package per.zdy.socketexchangeclientcp.web;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.hutool.log.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import per.zdy.socketexchangeclientcp.service.ServerCenterService;
+import per.zdy.socketexchangeclientcp.domain.Pojo.ServerInfo;
+import per.zdy.socketexchangeclientcp.share.PublicVariable;
+import per.zdy.socketexchangeclientcp.share.Result;
+import per.zdy.socketexchangeclientcp.share.ResultGenerator;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
@@ -16,9 +20,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint("/client/{sid}")
 @Component
 public class ServerCenterWebSocketController {
-
-    @Autowired
-    ServerCenterService serverCenterService;
 
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -41,12 +42,24 @@ public class ServerCenterWebSocketController {
         LogFactory.get().info("有新窗口开始监听:"+sid+",当前在线人数为" + getOnlineCount());
         this.sid=sid;
         try {
+            ServerInfo serverInfo = new ServerInfo();
             while (true){
-                sendMessage("连接成功，服务线程数："+ServerThreadPoolCenter.queryActiveThreadCount()+";工作线程数："+WorkerThreadPoolCenter.queryActiveThreadCount());
+                serverInfo.setPassListCount(PublicVariable.passCount);
+                if (PublicVariable.passCount>0){
+                    serverInfo.setOnline(true);
+                }else {
+                    serverInfo.setOnline(false);
+                }
+                serverInfo.setServerMaximumPoolSize(ServerThreadPoolCenter.queryMaximumPoolSize());
+                serverInfo.setWorkerMaximumPoolSize(WorkerThreadPoolCenter.queryMaximumPoolSize());
+                serverInfo.setServerActiveThreadCount(ServerThreadPoolCenter.queryActiveThreadCount());
+                serverInfo.setWorkerActiveThreadCount(WorkerThreadPoolCenter.queryActiveThreadCount());
+                JSONObject jsonObject = JSONUtil.parseObj(serverInfo);
+                sendMessage(ResultGenerator.genInfoResult(serverInfo,"clientInfo"));
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    return;
                 }
             }
         } catch (IOException e) {
@@ -76,7 +89,7 @@ public class ServerCenterWebSocketController {
             try {
                 item.sendMessage(message);
             } catch (IOException e) {
-                e.printStackTrace();
+                LogFactory.get().error(e.getMessage());
             }
         }
     }
@@ -88,12 +101,19 @@ public class ServerCenterWebSocketController {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        LogFactory.get().error("发生错误");
-        error.printStackTrace();
+        if (error.getMessage()!=null){
+            LogFactory.get().error(error.getMessage(),"发生错误");
+        }else {
+            LogFactory.get().info("ws线程退出");
+        }
     }
     /**
      * 实现服务器主动推送
      */
+    public void sendMessage(Result message) throws IOException {
+        this.session.getBasicRemote().sendText(message.toString());
+    }
+
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }

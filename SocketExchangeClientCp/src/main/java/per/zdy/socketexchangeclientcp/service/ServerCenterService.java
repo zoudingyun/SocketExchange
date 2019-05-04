@@ -37,5 +37,10 @@ public interface ServerCenterService  {
      * */
     public List<PassList> queryPass();
 
+    /**
+     * 查询通道数量
+     * */
+    public int queryPassCount();
+
 
 }

@@ -7,6 +7,7 @@ import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 import per.zdy.socketexchangeclientcp.domain.dao.PassListDao;
 import per.zdy.socketexchangeclientcp.domain.server.ServerRequestMonitor;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
+import per.zdy.socketexchangeclientcp.share.PublicVariable;
 import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
@@ -16,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.passCount;
 import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverState;
 
 @Service
@@ -46,6 +48,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
                                     serverThreadPoolCenter,
                                     workerThreadPoolCenter);
                     serverThreadPoolCenter.newThread(serverRequestMonitor);
+                    passCount++;
                 } catch (Exception e) {
                     e.printStackTrace();
                     errorPassList.add(passList);
@@ -71,6 +74,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
                 Socket targetSocket = new Socket();
                 targetSocket.connect(new InetSocketAddress("127.0.0.1",Integer.parseInt(passList.getAgentPort())),500);
                 targetSocket.close();
+                passCount=0;
             }catch (Exception ex){
                 continue;
             }
@@ -94,10 +98,16 @@ public class ServerCenterServiceImpl implements ServerCenterService {
         for (PassList passList:passLists){
             passListDao.save(passList);
         }
+
     }
 
     @Override
     public List<PassList> queryPass(){
         return passListDao.findAllPassList();
+    }
+
+    @Override
+    public int queryPassCount(){
+        return passCount;
     }
 }

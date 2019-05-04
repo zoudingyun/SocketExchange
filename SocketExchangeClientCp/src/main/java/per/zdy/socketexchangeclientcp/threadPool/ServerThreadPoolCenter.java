@@ -75,6 +75,12 @@ public class ServerThreadPoolCenter {
         return executor.getActiveCount();
     }
 
+    /**最大线程数*/
+    public static int queryMaximumPoolSize(){
+        return executor.getMaximumPoolSize();
+    }
+
+
     class NameTreadFactory implements ThreadFactory {
 
         private final AtomicInteger mThreadNum = new AtomicInteger(1);

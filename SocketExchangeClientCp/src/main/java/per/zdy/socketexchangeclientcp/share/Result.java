@@ -1,5 +1,6 @@
 package per.zdy.socketexchangeclientcp.share;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -9,6 +10,25 @@ public class Result {
     private int code;
     private String message;
     private Object data;
+    private String type="default";
+    private String time = DateUtil.now();
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Result setType(String type) {
+        this.type = type;
+        return this;
+    }
 
     public Result setCode(ResultCode resultCode) {
         this.code = resultCode.code;

@@ -18,9 +18,13 @@ public interface PassListDao extends JpaRepository<PassList, Long> {
     @Override
     PassList save(PassList passList);
 
-    /**查询*/
+    /**查询通道*/
     @Query(nativeQuery = true,value="SELECT * FROM PASS_LIST WHERE DELETE_FLAG = 0 order by id")
     List<PassList> findAllPassList();
+
+    /**查询通道数*/
+    @Query(nativeQuery = true,value="SELECT count(id) FROM PASS_LIST WHERE DELETE_FLAG = 0 ")
+    int findAllPassListCount();
 
     /**缓存配置*/
     @Modifying@Transactional

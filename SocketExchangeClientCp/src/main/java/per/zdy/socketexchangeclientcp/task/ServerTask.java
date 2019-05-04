@@ -27,6 +27,9 @@ public class ServerTask {
     @Autowired
     WorkerThreadPoolCenter workerThreadPoolCenter;
 
+    @Autowired
+    ServerCenterService serverCenterService;
+
 
 
     @Value("${server.remoteAddress}")
@@ -47,6 +50,9 @@ public class ServerTask {
             //初始化线程池
             serverThreadPoolCenter.threadPoolCreate();
             workerThreadPoolCenter.threadPoolCreate();
+
+            //初始化通道数
+            //serverCenterService.queryPassCount();
 
             //初始化远端服务器配置
             serverAddress = address;

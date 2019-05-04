@@ -8,7 +8,8 @@
         <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
         <link rel="stylesheet" href="./css/font.css">
         <link rel="stylesheet" href="./css/xadmin.css">
-				<script src="common/host.js"></script>
+		<script src="common/host.js"></script>
+		<script src="common/reconnecting-websocket-master/reconnecting-websocket.min.js"></script>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -24,7 +25,7 @@
                     <div class="layui-card">
                         <div class="layui-card-body ">
                             <blockquote class="layui-elem-quote">欢迎管理员：
-                                <span class="x-red">test</span>！系统时间:2018-04-25 20:50:53
+                                <span class="x-red">test</span>！系统时间:<span id="timeStr">2018-04-25 20:50:53</span>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																系统状态：<span id='serverState' style="color: #FF5722;width: 52px;">OFFLINE</span></br>
 																<button class="layui-btn" id="serverButtonOn" onclick="startServer()">
@@ -37,7 +38,7 @@
 														<blockquote class="layui-elem-quote">配置项：
 																<button class="layui-btn layui-btn-disabled" id="configUser" onclick="">
 																	<i class="layui-icon" id="statIcon">&#xe66f;</i><span id="serverButton">配置用户</span></button>
-																<button class="layui-btn layui-btn-normal" id="configUser" onclick="goUrl('member-list.html')">
+																<button class="layui-btn layui-btn-normal" id="configUser" onclick="goUrl('passList.html')">
 																	<i class="layui-icon" id="statIcon">&#xe609;</i><span id="serverButton">配置通道</span></button>
 														</blockquote>
                         </div>
@@ -48,48 +49,49 @@
                         <div class="layui-card-header">数据统计</div>
                         <div class="layui-card-body ">
                             <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+								<li class="layui-col-md2 layui-col-xs6 ">
+								    <a href="javascript:;" class="x-admin-backlog-body">
+								        <h3>已配置的通道数</h3>
+								        <p>
+								            <cite id="confPassCount">--</cite></p>
+								    </a>
+								</li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>配置通道数</h3>
+                                        <h3>已启动通道数</h3>
                                         <p>
-                                            <cite>16</cite></p>
+                                            <cite id="onlinePassCount">16</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>工作线程池总数</h3>
                                         <p>
-                                            <cite>99</cite></p>
+                                            <cite id="workerMaximumPoolSize">99</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>已使用工作线程数</h3>
                                         <p>
-                                            <cite>12</cite></p>
+                                            <cite id="workerActiveThreadCount">12</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>服务线程池总数</h3>
                                         <p>
-                                            <cite>6</cite></p>
+                                            <cite id="serverMaximumPoolSize">6</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>已使用服务线程数</h3>
                                         <p>
-                                            <cite>2</cite></p>
+                                            <cite id="serverActiveThreadCount">2</cite></p>
                                     </a>
                                 </li>
-                                <li class="layui-col-md2 layui-col-xs6 ">
-                                    <a href="javascript:;" class="x-admin-backlog-body">
-                                        <h3>正在使用的通道</h3>
-                                        <p>
-                                            <cite>--</cite></p>
-                                    </a>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>
