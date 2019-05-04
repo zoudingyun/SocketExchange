@@ -37,4 +37,5 @@ public interface ServerCenterService  {
      * */
     public List<PassList> queryPass();
 
+
 }
