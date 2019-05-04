@@ -82,3 +82,7 @@ function makeReportData(dats) {
 	}
 	return params;
 }
+
+function goUrl(url){
+	window.location.href=url;
+}
