@@ -32,4 +32,11 @@ public class ResultGenerator {
                 .setCode(ResultCode.FAIL)
                 .setMessage(message);
     }
+
+    public static Result genConsoleMessage(String message) {
+        return new Result()
+                .setCode(ResultCode.SUCCESS)
+                .setType("CONSOLE")
+                .setMessage(message);
+    }
 }

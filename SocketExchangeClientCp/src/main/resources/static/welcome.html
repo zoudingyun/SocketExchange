@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="./css/xadmin.css">
 		<script src="common/host.js"></script>
 		<script src="common/reconnecting-websocket-master/reconnecting-websocket.min.js"></script>
+		<script type="text/javascript" src="common/scrollbot-master/src/scrollbot.min.js"></script>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -28,12 +29,12 @@
                                 <span class="x-red">test</span>！系统时间:<span id="timeStr">2018-04-25 20:50:53</span>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																系统状态：<span id='serverState' style="color: #FF5722;width: 52px;">OFFLINE</span></br>
-																<button class="layui-btn" id="serverButtonOn" onclick="startServer()">
-																	<i class="layui-icon" id="statIcon">&#xe679;</i><span id="serverButton">启动服务</span></button>
+																<button class="layui-btn" id="serverButtonOn" style="display: block;" onclick="startServer()">
+																	<i class="layui-icon" id="statIcon">&#xe679;</i><span id="serverButton">全部启动</span></button>
 																<button class="layui-btn layui-btn-danger" style="display: none;" id="serverButtonIng" onclick="offServer()">
 																	<i class="layui-icon" id="statIcon">&#xe63d;</i><span id="serverButton">进行中</span></button>
 																<button class="layui-btn layui-btn-danger" style="display: none;" id="serverButtonOff" onclick="offServer()">
-																	<i class="layui-icon" id="statIcon">&#x1006;</i><span id="serverButton">关闭服务</span></button>
+																	<i class="layui-icon" id="statIcon">&#x1006;</i><span id="serverButton">全部关闭</span></button>
                             </blockquote>
 														<blockquote class="layui-elem-quote">配置项：
 																<button class="layui-btn layui-btn-disabled" id="configUser" onclick="">
@@ -96,58 +97,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-col-sm6 layui-col-md6">
                     <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
-                        <div class="layui-card-body  ">
+                        <div class="layui-card-header">服务器信息
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">上次加载</span>
+												</div>
+                        <div id="serverWindow" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">客户端信息
+                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">在线</span>
+												</div>
+												<div id="console" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
+												</div>
+                        <!-- <div class="layui-card-body ">
                             <p class="layuiadmin-big-font">33,555</p>
                             <p>新下载
                                 <span class="layuiadmin-span-color">10%
                                     <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
                             </p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="layui-col-sm6 layui-col-md3">
-                    <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
-                        <div class="layui-card-body ">
-                            <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
-                                <span class="layuiadmin-span-color">10%
-                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-sm6 layui-col-md3">
-                    <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
-                        <div class="layui-card-body ">
-                            <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
-                                <span class="layuiadmin-span-color">10%
-                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-sm6 layui-col-md3">
-                    <div class="layui-card">
-                        <div class="layui-card-header">下载
-                            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>
-                        <div class="layui-card-body ">
-                            <p class="layuiadmin-big-font">33,555</p>
-                            <p>新下载
-                                <span class="layuiadmin-span-color">10%
-                                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-header">系统信息</div>

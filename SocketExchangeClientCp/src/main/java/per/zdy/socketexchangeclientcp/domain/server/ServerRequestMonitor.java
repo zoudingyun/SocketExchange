@@ -43,7 +43,6 @@ public class ServerRequestMonitor implements Runnable {
         try {
             //监听服务端口
             ServerSocket serverSocket=new ServerSocket();
-            //serverSocket.setReuseAddress(true);
             serverSocket.bind(new InetSocketAddress(port));
             socketServerOnline=true;
             Socket ssocket = new Socket();
