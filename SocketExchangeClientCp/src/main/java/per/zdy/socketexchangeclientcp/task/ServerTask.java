@@ -17,6 +17,8 @@ import java.io.PrintStream;
 
 import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverAddress;
 import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverPort;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.osStr;
+
 
 /**
  * 初始化服务
@@ -66,10 +68,10 @@ public class ServerTask {
             //设置新的out
             System.setOut(new PrintStream(newStream));
 
-            //恢复原来的System.out
-            //System.setOut(oldPrintStream);
-            //将bos中保存的信息输出,这就是我们上面准备要输出的内容
-            //System.out.println(bos.toString());
+            //判断操作系统
+            osStr = System.getProperty("os.name");
+            LogFactory.get().info("System Os:"+osStr);
+
         }catch (Exception ex){
             LogFactory.get().error(ex);
         }

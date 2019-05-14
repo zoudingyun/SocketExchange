@@ -14,6 +14,8 @@ public class PublicVariable {
     public static int serverPort;
     //通道数
     public static int passCount;
+    //操作系统
+    public static String osStr;
 
     /**本地监听服务启动状态（true启动，false关闭）*/
     public static Boolean serverState = false;
