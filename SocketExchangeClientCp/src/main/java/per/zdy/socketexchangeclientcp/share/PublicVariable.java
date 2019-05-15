@@ -1,9 +1,14 @@
 package per.zdy.socketexchangeclientcp.share;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.log.LogFactory;
+import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
 import per.zdy.socketexchangeclientcp.web.ServerCenterWebSocketController;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PublicVariable {
@@ -16,6 +21,55 @@ public class PublicVariable {
     public static int passCount;
     //操作系统
     public static String osStr;
+
+    public static Boolean isWin(){
+        if (osStr.indexOf("Win")>=0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public static void freshHostWin(List<PassList> passLists){
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("C:/Windows/System32/drivers/etc/hosts"));
+
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new FileWriter("C:/Windows/System32/drivers/etc/hosts", true)));
+
+            String line = null;
+
+            List<String> hosts = new ArrayList<>();
+            while ((line = br.readLine()) != null){
+                hosts.add(line);
+            }
+
+            for (PassList host:passLists){
+                boolean flag=true;
+                for (String tmp:hosts){
+                    if (tmp.indexOf(host.getAgentAdd())==(tmp.length()-host.getAgentAdd().length())){
+                        flag=false;
+                        break;
+                    }
+                }
+                if (flag){
+                    out.println("127.0.0.1 "+host.getAgentAdd());
+                    flag=false;
+                }
+            }
+
+            br.close();
+            out.close();
+        } catch (FileNotFoundException e) {
+            LogFactory.get().error(e,"change hosts error！");
+        } catch (IOException e) {
+            LogFactory.get().error(e,"change hosts error！");
+        }
+    }
+
+    public static void freshHostLinux(String host){
+
+    }
 
     /**本地监听服务启动状态（true启动，false关闭）*/
     public static Boolean serverState = false;

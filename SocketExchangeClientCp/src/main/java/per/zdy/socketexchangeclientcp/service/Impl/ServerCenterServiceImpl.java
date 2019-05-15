@@ -17,8 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.passCount;
-import static per.zdy.socketexchangeclientcp.share.PublicVariable.serverState;
+import static per.zdy.socketexchangeclientcp.share.PublicVariable.*;
 
 @Service
 public class ServerCenterServiceImpl implements ServerCenterService {
@@ -54,6 +53,9 @@ public class ServerCenterServiceImpl implements ServerCenterService {
                     errorPassList.add(passList);
                 }
             }
+            if (isWin()){
+                freshHostWin(passLists);
+            }
 
         }else {
             try {
@@ -64,6 +66,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
         }
 
     }
+
 
     @Override
     public void closeServer(){

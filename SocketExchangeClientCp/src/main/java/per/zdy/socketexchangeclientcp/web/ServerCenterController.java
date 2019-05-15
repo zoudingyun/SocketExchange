@@ -1,5 +1,6 @@
 package per.zdy.socketexchangeclientcp.web;
 
+import cn.hutool.log.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
@@ -76,6 +77,21 @@ public class ServerCenterController {
             return ResultGenerator.genSuccessResult(serverCenterService.queryPass());
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());
+        }
+
+    }
+
+    /**
+     * 退出
+     * */
+    @PostMapping("/exit")
+    @CrossOrigin
+    public void exit() {
+        try{
+            System.exit(0);
+        }catch (Exception ex){
+            LogFactory.get().error(ex);
+            System.exit(-1);
         }
 
     }
