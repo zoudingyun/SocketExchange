@@ -18,7 +18,7 @@ public class UserInfo {
     String userPwd;
 
     @Column(nullable = false)
-    String userName;
+    String userName = "";
 
     public Long getId() {
         return id;

@@ -4,7 +4,9 @@ package per.zdy.socketexchangeclientcp.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
 import per.zdy.socketexchangeclientcp.domain.dao.PassListDao;
+import per.zdy.socketexchangeclientcp.domain.dao.UserInfoDao;
 import per.zdy.socketexchangeclientcp.domain.server.ServerRequestMonitor;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
 import per.zdy.socketexchangeclientcp.share.PublicVariable;
@@ -31,6 +33,10 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Autowired
     PassListDao passListDao;
 
+    @Autowired
+    UserInfoDao userInfoDao;
+
+
     @Override
     public void server(){
         //启动服务
@@ -45,7 +51,8 @@ public class ServerCenterServiceImpl implements ServerCenterService {
                                     passList.getRemoteAdd(),
                                     Integer.parseInt(passList.getRemotePort()),
                                     serverThreadPoolCenter,
-                                    workerThreadPoolCenter);
+                                    workerThreadPoolCenter,
+                                    queryUser());
                     serverThreadPoolCenter.newThread(serverRequestMonitor);
                     passCount++;
                 } catch (Exception e) {
@@ -112,5 +119,25 @@ public class ServerCenterServiceImpl implements ServerCenterService {
     @Override
     public int queryPassCount(){
         return passCount;
+    }
+
+    @Override
+    public UserInfo queryUser(){
+        List<UserInfo> userInfos = userInfoDao.findAllUserInfo();
+        if (userInfos.size()==1){
+            return userInfos.get(0);
+        }else {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId("test");
+            userInfo.setUserName("测试用户");
+            userInfo.setUserPwd("123456");
+            return userInfo;
+        }
+    }
+
+    @Override
+    public void saveUser(UserInfo userInfo){
+        userInfoDao.deleteHistoryAllUserInfo();
+        userInfoDao.save(userInfo);
     }
 }

@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.log.LogFactory;
 import per.zdy.socketexchangeclientcp.domain.Pojo.RequestInfoPojo;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
 import per.zdy.socketexchangeclientcp.domain.worker.Socket2SocketWorker;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
@@ -24,12 +25,19 @@ public class ServerDispatcher implements Runnable {
     Socket requestSocket;
     String remoteAdd;
     int remotePort;
+    UserInfo userInfo;
 
-    public ServerDispatcher(Socket requestSocket,String remoteAdd,int remotePort,WorkerThreadPoolCenter workerThreadPoolCenter) {
+    public ServerDispatcher(Socket requestSocket
+                            ,String remoteAdd
+                            ,int remotePort
+                            ,WorkerThreadPoolCenter workerThreadPoolCenter
+                            ,UserInfo userInfo
+                            ) {
         this.requestSocket = requestSocket;
         this.workerThreadPoolCenter = workerThreadPoolCenter;
         this.remoteAdd = remoteAdd;
         this.remotePort = remotePort;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -40,8 +48,8 @@ public class ServerDispatcher implements Runnable {
                 RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
                 requestInfoPojo.setTargetIp(remoteAdd);
                 requestInfoPojo.setTargetPort(remotePort);
-                requestInfoPojo.setUserName("zdy");
-                requestInfoPojo.setUserPwd("123456");
+                requestInfoPojo.setUserName(userInfo.getUserId());
+                requestInfoPojo.setUserPwd(userInfo.getUserPwd());
                 JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
 
                 //向服务器发送定向请求

@@ -1,6 +1,7 @@
 package per.zdy.socketexchangeclientcp.service;
 
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
 
 import java.util.List;
 
@@ -41,6 +42,17 @@ public interface ServerCenterService  {
      * 查询通道数量
      * */
     public int queryPassCount();
+
+    /**
+     * 查询用户信息
+     * @return 用户信息
+     * */
+    public UserInfo queryUser();
+
+    /**
+     * 保存用户信息
+     * */
+    public void saveUser(UserInfo userInfo);
 
 
 }

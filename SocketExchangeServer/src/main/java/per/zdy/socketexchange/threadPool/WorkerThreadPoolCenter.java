@@ -43,8 +43,12 @@ public class WorkerThreadPoolCenter {
     RejectedExecutionHandler handler = new WorkerThreadPoolCenter.MyIgnorePolicy();
 
     /**线程池*/
-    ThreadPoolExecutor executor;
+    public static ThreadPoolExecutor executor;
 
+    /**最大线程数*/
+    public static int queryMaximumPoolSize(){
+        return executor.getMaximumPoolSize();
+    }
 
     public void threadPoolCreate() throws Exception {
         BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(workQueueNum);
@@ -64,7 +68,7 @@ public class WorkerThreadPoolCenter {
     }
 
     /**活跃线程数*/
-    public int queryActiveThreadCount(){
+    public static int queryActiveThreadCount(){
         return executor.getActiveCount();
     }
 

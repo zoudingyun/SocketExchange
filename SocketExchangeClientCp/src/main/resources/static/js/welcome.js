@@ -1,9 +1,17 @@
  var ws = new ReconnectingWebSocket(baseAjaxURLWs+'client/test2');
  var consoles = new Array();
  var maxConsoles = 100;
+ var layer;
+ var usrId = '';
+ var usrName = '';
+ var usrPwd = '';
 
 
  document.getElementById("console").value="";
+ 
+ layui.use('layer', function(){
+  layer = layui.layer;
+});  
  
  ws.onopen = function() {
      console.log('open');
@@ -79,6 +87,34 @@
  ws.onclose = function() {
      console.log('close');
  };
+ 
+ function setUser(){
+	 layer.open({
+				  type: 1,
+				  skin: 'layui-layer-demo', //样式类名
+				  closeBtn: 1, //不显示关闭按钮
+				  anim: 2,
+				  shadeClose: true, //开启遮罩关闭
+				  title: '用户设置',
+				  content: '<div class="login layui-anim layui-anim-up" style="min-height:0px;height:300px;margin:0px;padding-top:0px;padding-bottom:0px">'+
+								'<div class="message">配置用户</div>'+
+								'<div id="darkbannerwrap"></div>'+
+								'<form method="post" class="layui-form" >'+
+									'<input id="userId" name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >'+
+									'<hr class="hr15">'+
+									'<input id="userPwd" name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">'+
+									'<hr class="hr15">'+
+									'<div class="layui-btn layui-btn-normal" style="width:178px" id="saveUsr" onclick="updateUsr()">'+
+									'<i class="layui-icon">&#xe66f;</i><span id="serverButton">保存</span></div>'+
+									
+									'<hr class="hr20" >'+
+								'</form>'+
+							'</div>'
+				});
+	document.getElementById('userId').value=usrId;
+	document.getElementById('userPwd').value=usrPwd;
+	 //layer.msg('hello');
+ }
  
  //控制台日志颜色处理
  function formatConsole(message){
@@ -186,3 +222,40 @@ function goUrl(url){
 	window.location.href=url;
 }
 
+function onload(){
+		
+	$.ajax( {
+				type: "POST",
+				contentType: "application/json",
+				url:baseAjaxURL + "/queryUser",
+				data: "",
+				success:function(response) {
+					usrId = response.data.userId;
+					usrName = response.data.userName;
+					usrPwd = response.data.userPwd;
+					
+				}
+			}
+		);
+}
+
+function updateUsr(){
+	$.ajax( {
+				type: "POST",
+				contentType: "application/json",
+				url:baseAjaxURL + "/saveUser",
+				data: JSON.stringify(formatUser()),
+				success:function(response) {	
+					onload();		
+					layer.msg('保存成功！');
+				}
+			}
+		);
+}
+
+function formatUser(){
+	var tmp = {userId:null,userPwd:null};
+	tmp.userId = document.getElementById('userId').value;
+	tmp.userPwd = document.getElementById('userPwd').value;
+	return tmp;
+}

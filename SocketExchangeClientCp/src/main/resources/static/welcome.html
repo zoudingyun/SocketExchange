@@ -7,6 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
         <link rel="stylesheet" href="./css/font.css">
+		<link rel="stylesheet" href="./css/login.css">
         <link rel="stylesheet" href="./css/xadmin.css">
 		<script src="common/host.js"></script>
 		<script src="common/reconnecting-websocket-master/reconnecting-websocket.min.js"></script>
@@ -19,14 +20,14 @@
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body onload="onload()">
         <div class="layui-fluid">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
                             <blockquote class="layui-elem-quote">欢迎管理员：
-                                <span class="x-red">test</span>！系统时间:<span id="timeStr">2018-04-25 20:50:53</span>
+                                <span id="username" class="x-red">test</span>！系统时间:<span id="timeStr">2018-04-25 20:50:53</span>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																系统状态：<span id='serverState' style="color: #FF5722;width: 52px;">OFFLINE</span></br>
 																<button class="layui-btn" id="serverButtonOn" style="display: block;" onclick="startServer()">
@@ -37,7 +38,7 @@
 																	<i class="layui-icon" id="statIcon">&#x1006;</i><span id="serverButton">全部关闭</span></button>
                             </blockquote>
 														<blockquote class="layui-elem-quote">配置项：
-																<button class="layui-btn layui-btn-disabled" id="configUser" onclick="">
+																<button class="layui-btn layui-btn-normal" id="configUser" onclick="setUser()">
 																	<i class="layui-icon" id="statIcon">&#xe66f;</i><span id="serverButton">配置用户</span></button>
 																<button class="layui-btn layui-btn-normal" id="configUser" onclick="goUrl('passList.html')">
 																	<i class="layui-icon" id="statIcon">&#xe609;</i><span id="serverButton">配置通道</span></button>
@@ -61,35 +62,35 @@
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>已启动通道数</h3>
                                         <p>
-                                            <cite id="onlinePassCount">16</cite></p>
+                                            <cite id="onlinePassCount">--</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>工作线程池总数</h3>
                                         <p>
-                                            <cite id="workerMaximumPoolSize">99</cite></p>
+                                            <cite id="workerMaximumPoolSize">--</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>已使用工作线程数</h3>
                                         <p>
-                                            <cite id="workerActiveThreadCount">12</cite></p>
+                                            <cite id="workerActiveThreadCount">--</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>服务线程池总数</h3>
                                         <p>
-                                            <cite id="serverMaximumPoolSize">6</cite></p>
+                                            <cite id="serverMaximumPoolSize">--</cite></p>
                                     </a>
                                 </li>
                                 <li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>已使用服务线程数</h3>
                                         <p>
-                                            <cite id="serverActiveThreadCount">2</cite></p>
+                                            <cite id="serverActiveThreadCount">--</cite></p>
                                     </a>
                                 </li>
                                 

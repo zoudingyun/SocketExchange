@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.log.LogFactory;
 import per.zdy.socketexchangeclientcp.domain.Pojo.RequestInfoPojo;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
 import per.zdy.socketexchangeclientcp.threadPool.ServerThreadPoolCenter;
 import per.zdy.socketexchangeclientcp.threadPool.WorkerThreadPoolCenter;
 
@@ -29,13 +30,19 @@ public class ServerRequestMonitor implements Runnable {
     WorkerThreadPoolCenter workerThreadPoolCenter;
     String remoteAdd;
     int remotePort;
+    UserInfo userInfo;
 
-    public ServerRequestMonitor(int port,String remoteAdd,int remotePort,ServerThreadPoolCenter serverThreadPoolCenter,WorkerThreadPoolCenter workerThreadPoolCenter){
+    public ServerRequestMonitor(int port, String remoteAdd
+                                , int remotePort
+                                , ServerThreadPoolCenter serverThreadPoolCenter
+                                , WorkerThreadPoolCenter workerThreadPoolCenter
+                                , UserInfo userInfo){
         this.port=port;
         this.serverThreadPoolCenter = serverThreadPoolCenter;
         this.workerThreadPoolCenter = workerThreadPoolCenter;
         this.remoteAdd = remoteAdd;
         this.remotePort = remotePort;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -51,7 +58,7 @@ public class ServerRequestMonitor implements Runnable {
                 ssocket = serverSocket.accept();
                 if (serverState){
                     try{
-                        ServerDispatcher myTask = new ServerDispatcher(ssocket,remoteAdd,remotePort,workerThreadPoolCenter);
+                        ServerDispatcher myTask = new ServerDispatcher(ssocket,remoteAdd,remotePort,workerThreadPoolCenter,userInfo);
                         serverThreadPoolCenter.newThread(myTask);
                     }catch (Exception ex){
                         LogFactory.get().error(ex);

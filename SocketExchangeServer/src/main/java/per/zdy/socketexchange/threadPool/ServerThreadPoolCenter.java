@@ -41,7 +41,12 @@ public class ServerThreadPoolCenter {
     RejectedExecutionHandler handler = new MyIgnorePolicy();
 
     /**线程池*/
-    ThreadPoolExecutor executor;
+    public static ThreadPoolExecutor executor;
+
+    /**最大线程数*/
+    public static int queryMaximumPoolSize(){
+        return executor.getMaximumPoolSize();
+    }
 
 
     public void threadPoolCreate() throws Exception {
@@ -63,7 +68,7 @@ public class ServerThreadPoolCenter {
     }
 
     /**活跃线程数*/
-    public int queryActiveThreadCount(){
+    public static int queryActiveThreadCount(){
         return executor.getActiveCount();
     }
 

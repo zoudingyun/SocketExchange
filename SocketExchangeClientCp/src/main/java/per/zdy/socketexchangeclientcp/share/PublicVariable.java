@@ -2,8 +2,11 @@ package per.zdy.socketexchangeclientcp.share;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.log.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
 import per.zdy.socketexchangeclientcp.domain.Pojo.ReturnPojo;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
+import per.zdy.socketexchangeclientcp.domain.dao.UserInfoDao;
 import per.zdy.socketexchangeclientcp.web.ServerCenterWebSocketController;
 
 import java.io.*;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PublicVariable {
+
 
     //远程服务器地址
     public static String serverAddress;
@@ -70,6 +74,7 @@ public class PublicVariable {
     public static void freshHostLinux(String host){
 
     }
+
 
     /**本地监听服务启动状态（true启动，false关闭）*/
     public static Boolean serverState = false;

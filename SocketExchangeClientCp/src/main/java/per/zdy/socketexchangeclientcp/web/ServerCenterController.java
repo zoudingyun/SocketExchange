@@ -4,6 +4,7 @@ import cn.hutool.log.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import per.zdy.socketexchangeclientcp.domain.Pojo.PassList;
+import per.zdy.socketexchangeclientcp.domain.Pojo.UserInfo;
 import per.zdy.socketexchangeclientcp.service.ServerCenterService;
 import per.zdy.socketexchangeclientcp.share.Result;
 import per.zdy.socketexchangeclientcp.share.ResultGenerator;
@@ -75,6 +76,35 @@ public class ServerCenterController {
     public Result queryPass() {
         try{
             return ResultGenerator.genSuccessResult(serverCenterService.queryPass());
+        }catch (Exception ex){
+            return ResultGenerator.genFailResult(ex.getMessage());
+        }
+
+    }
+
+    /**
+     * 查询用户
+     * */
+    @PostMapping("/queryUser")
+    @CrossOrigin
+    public Result queryUser() {
+        try{
+            return ResultGenerator.genSuccessResult(serverCenterService.queryUser());
+        }catch (Exception ex){
+            return ResultGenerator.genFailResult(ex.getMessage());
+        }
+
+    }
+
+    /**
+     * 保存用户
+     * */
+    @PostMapping("/saveUser")
+    @CrossOrigin
+    public Result saveUser(@RequestBody UserInfo userInfo) {
+        try{
+            serverCenterService.saveUser(userInfo);
+            return ResultGenerator.genSuccessResult();
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());
         }
