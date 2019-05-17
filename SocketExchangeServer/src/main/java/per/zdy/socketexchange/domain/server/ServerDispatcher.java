@@ -48,67 +48,87 @@ public class ServerDispatcher implements Runnable {
 
             //接受到客户端的传参
             JSONObject jsonObject = JSONUtil.parseObj(sb);
-            if (!jsonObject.get("targetIp").equals("")&&!jsonObject.get("targetPort").equals("")
-                    &&!jsonObject.get("userId").equals("")&&!jsonObject.get("userPwd").equals("")){
-                try{
-                    List<AllUserPass> allUserPasses = userPassesMap.get(jsonObject.get("userId").toString()+jsonObject.get("userPwd").toString());
-                    if (allUserPasses == null){
-                        JSONObject reJsonObject = new JSONObject();
-                        reJsonObject.put("code","401");
-                        reJsonObject.put("message","请核对用户信息！");
-                        outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                        outputStream.flush();
-                        return;
-                    }else {
-                        for (AllUserPass allUserPassTmp :allUserPasses){
-                            if (allUserPassTmp.getIp().equals(jsonObject.get("targetIp"))||allUserPassTmp.getIp().equals("*")){
-                                if (allUserPassTmp.getPort().equals(jsonObject.get("targetPort")+"")||allUserPassTmp.getPort().equals("*")){
-                                    try{
-                                        sendUserWorkInfo(allUserPassTmp.getUserName()+" 尝试主动连接-"+jsonObject.get("targetIp").toString()+":"+jsonObject.get("targetPort").toString());
+            if (jsonObject.get("type").equals("signIn")){
+                List<AllUserPass> allUserPasses = userPassesMap.get(jsonObject.get("userId").toString()+jsonObject.get("userPwd").toString());
+                if(allUserPasses != null){
+                    JSONObject reJsonObject = new JSONObject();
+                    reJsonObject.put("code","200");
+                    reJsonObject.put("message","ok");
+                    reJsonObject.put("userName",allUserPasses.get(0).getUserName());
+                    outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                    outputStream.flush();
+                    return;
+                }else {
+                    JSONObject reJsonObject = new JSONObject();
+                    reJsonObject.put("code","403");
+                    reJsonObject.put("message","null");
+                    reJsonObject.put("userName","");
+                    outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                    outputStream.flush();
+                    return;
+                }
+            }else if (jsonObject.get("type").equals("activeConnect")){
+                if (!jsonObject.get("targetIp").equals("")&&!jsonObject.get("targetPort").equals("")
+                        &&!jsonObject.get("userId").equals("")&&!jsonObject.get("userPwd").equals("")){
+                    try{
+                        List<AllUserPass> allUserPasses = userPassesMap.get(jsonObject.get("userId").toString()+jsonObject.get("userPwd").toString());
+                        if (allUserPasses == null){
+                            JSONObject reJsonObject = new JSONObject();
+                            reJsonObject.put("code","401");
+                            reJsonObject.put("message","请核对用户信息！");
+                            outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                            outputStream.flush();
+                            return;
+                        }else {
+                            for (AllUserPass allUserPassTmp :allUserPasses){
+                                if (allUserPassTmp.getIp().equals(jsonObject.get("targetIp"))||allUserPassTmp.getIp().equals("*")){
+                                    if (allUserPassTmp.getPort().equals(jsonObject.get("targetPort")+"")||allUserPassTmp.getPort().equals("*")){
+                                        try{
+                                            sendUserWorkInfo(allUserPassTmp.getUserName()+" 尝试主动连接-"+jsonObject.get("targetIp").toString()+":"+jsonObject.get("targetPort").toString());
 
-                                        Socket targetSocket = new Socket(jsonObject.get("targetIp").toString()
-                                                ,Integer.parseInt(jsonObject.get("targetPort").toString()));
+                                            Socket targetSocket = new Socket(jsonObject.get("targetIp").toString()
+                                                    ,Integer.parseInt(jsonObject.get("targetPort").toString()));
 
-                                        Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket,allUserPassTmp,true);
-                                        workerThreadPoolCenter.newThread(socket2SocketWorker);
-                                        Socket2SocketWorker socket2SocketWorker2 = new Socket2SocketWorker(targetSocket,requestSocket,allUserPassTmp);
-                                        workerThreadPoolCenter.newThread(socket2SocketWorker2);
+                                            Socket2SocketWorker socket2SocketWorker = new Socket2SocketWorker(requestSocket,targetSocket,allUserPassTmp,true);
+                                            workerThreadPoolCenter.newThread(socket2SocketWorker);
+                                            Socket2SocketWorker socket2SocketWorker2 = new Socket2SocketWorker(targetSocket,requestSocket,allUserPassTmp);
+                                            workerThreadPoolCenter.newThread(socket2SocketWorker2);
 
-                                        JSONObject reJsonObject = new JSONObject();
-                                        reJsonObject.put("code","200");
-                                        reJsonObject.put("message","ok");
-                                        outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                                        outputStream.flush();
-                                        return;
-                                    }catch (Exception ex){
-                                        sendUserWorkInfo(allUserPassTmp.getUserName()+" 连接-"+jsonObject.get("targetIp").toString()+":"+jsonObject.get("targetPort").toString()+"失败！原因："+ex.getMessage());
-                                        JSONObject reJsonObject = new JSONObject();
-                                        reJsonObject.put("code","402");
-                                        reJsonObject.put("message","服务器无法连接目标地址："+ex.getMessage());
-                                        outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                                        outputStream.flush();
-                                        return;
+                                            JSONObject reJsonObject = new JSONObject();
+                                            reJsonObject.put("code","200");
+                                            reJsonObject.put("message","ok");
+                                            outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                                            outputStream.flush();
+                                            return;
+                                        }catch (Exception ex){
+                                            sendUserWorkInfo(allUserPassTmp.getUserName()+" 连接-"+jsonObject.get("targetIp").toString()+":"+jsonObject.get("targetPort").toString()+"失败！原因："+ex.getMessage());
+                                            JSONObject reJsonObject = new JSONObject();
+                                            reJsonObject.put("code","402");
+                                            reJsonObject.put("message","服务器无法连接目标地址："+ex.getMessage());
+                                            outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                                            outputStream.flush();
+                                            return;
+                                        }
                                     }
                                 }
                             }
+                            JSONObject reJsonObject = new JSONObject();
+                            reJsonObject.put("code","401");
+                            reJsonObject.put("message","权限不足，禁止访问！");
+                            outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
+                            outputStream.flush();
+                            return;
                         }
+                    }catch (Exception ex){
                         JSONObject reJsonObject = new JSONObject();
-                        reJsonObject.put("code","401");
-                        reJsonObject.put("message","权限不足，禁止访问！");
+                        reJsonObject.put("code","500");
+                        reJsonObject.put("message",ex);
                         outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
                         outputStream.flush();
-                        return;
                     }
-
-
-                }catch (Exception ex){
-                    JSONObject reJsonObject = new JSONObject();
-                    reJsonObject.put("code","500");
-                    reJsonObject.put("message",ex);
-                    outputStream.write(JSONUtil.toJsonStr(reJsonObject).getBytes("UTF-8"));
-                    outputStream.flush();
                 }
             }
+
         }catch (Exception ex){
             LogFactory.get().error(ex);
         }

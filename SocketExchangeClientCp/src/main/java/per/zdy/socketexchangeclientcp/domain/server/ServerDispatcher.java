@@ -51,6 +51,7 @@ public class ServerDispatcher implements Runnable {
                 requestInfoPojo.setTargetPort(remotePort);
                 requestInfoPojo.setUserId(userInfo.getUserId());
                 requestInfoPojo.setUserPwd(userInfo.getUserPwd());
+                requestInfoPojo.setType("activeConnect");
                 JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
 
                 //向服务器发送定向请求

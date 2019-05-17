@@ -149,11 +149,11 @@ public class ServerCenterWebSocketController {
      * */
     static Long timeNum = 0L;
     public static void sendUserWorkInfo(String message) throws IOException {
+        LogFactory.get().info(message);
         if ((System.currentTimeMillis()-timeNum)>2000){
             for (ServerCenterWebSocketController item : webSocketSet) {
                 try {
                     //这里可以设定只推送给这个sid的，为null则全部推送
-                    LogFactory.get().info(message);
                     item.sendMessage(ResultGenerator.genUserWorkMessage(message));
                 } catch (IOException e) {
                     continue;

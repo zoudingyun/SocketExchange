@@ -252,7 +252,8 @@ function onload(){
 					usrId = response.data.userId;
 					usrName = response.data.userName;
 					usrPwd = response.data.userPwd;
-					serverWs = new ReconnectingWebSocket(baseAjaxURLServerWs+'server/测试'+usrName);
+					document.getElementById("username").innerHTML = usrName;
+					serverWs = new ReconnectingWebSocket(baseAjaxURLServerWs+'server/'+usrName);
 					serverWs.onopen = function() {
 						console.log('connect server');
 					};
