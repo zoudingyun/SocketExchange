@@ -44,6 +44,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
         List<PassList> passLists = passListDao.findAllPassList();
         if (passLists.size()>0){
             List<PassList> errorPassList = new ArrayList<>();
+            UserInfo userInfo = queryUser();
             for (PassList passList:passLists){
                 try {
                     ServerRequestMonitor serverRequestMonitor =
@@ -52,7 +53,7 @@ public class ServerCenterServiceImpl implements ServerCenterService {
                                     Integer.parseInt(passList.getRemotePort()),
                                     serverThreadPoolCenter,
                                     workerThreadPoolCenter,
-                                    queryUser());
+                                    userInfo);
                     serverThreadPoolCenter.newThread(serverRequestMonitor);
                     passCount++;
                 } catch (Exception e) {

@@ -7,7 +7,7 @@ package per.zdy.socketexchangeclientcp.domain.Pojo;
 public class RequestInfoPojo {
     String targetIp;
     int targetPort;
-    String userName;
+    String userId;
     String userPwd;
 
     public String getTargetIp() {
@@ -26,12 +26,12 @@ public class RequestInfoPojo {
         this.targetPort = targetPort;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userName) {
+        this.userId = userName;
     }
 
     public String getUserPwd() {

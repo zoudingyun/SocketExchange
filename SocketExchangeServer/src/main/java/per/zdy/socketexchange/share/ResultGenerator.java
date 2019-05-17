@@ -39,4 +39,11 @@ public class ResultGenerator {
                 .setType("CONSOLE")
                 .setMessage(message);
     }
+
+    public static Result genUserWorkMessage(String message) {
+        return new Result()
+                .setCode(ResultCode.SUCCESS)
+                .setType("SYSTEM-USERMES")
+                .setMessage(message);
+    }
 }

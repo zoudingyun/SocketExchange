@@ -12,7 +12,7 @@ public class ServerCenterController {
 
     @RequestMapping("/")
     public String indexHtml() {
-        return "/html/index.html";
+        return "/index.html";
     }
 
 }

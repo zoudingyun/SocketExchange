@@ -1,5 +1,9 @@
 package per.zdy.socketexchange.service;
 
+import per.zdy.socketexchange.domain.pojo.AllUserPass;
+
+import java.util.List;
+
 public interface ServerCenterService  {
 
     /**
@@ -17,5 +21,10 @@ public interface ServerCenterService  {
      * 获取工作线程池活动线程数
      * */
     public int queryWorkerActiveThreadCount();
+
+    /**
+     * 获取所有权限
+     * */
+    public List<AllUserPass> queryAllUserPass();
 
 }

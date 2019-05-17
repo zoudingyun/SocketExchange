@@ -18,21 +18,28 @@ import java.io.IOException;
 
 import static per.zdy.socketexchange.share.PublicVariable.webSocketSet;
 
-@ServerEndpoint("/client/{sid}")
+/**
+ * 服务端websocket接口
+ * @author ZDY
+ * @date 20190516
+ * */
+@ServerEndpoint("/server/{sid}")
 @Component
 public class ServerCenterWebSocketController {
 
 
-    //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
+    /**静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。*/
     private static int onlineCount = 0;
 
     /**与某个客户端的连接会话，需要通过它来给客户端发送数据*/
     private Session session;
 
-    //接收sid
+    /**接收sid*/
     private String sid="";
+
     /**
-     * 连接建立成功调用的方法*/
+     *  连接建立成功调用的方法
+     *  */
     @OnOpen
     public void onOpen(Session session, @PathParam("sid") String sid) {
         this.session = session;
@@ -43,7 +50,7 @@ public class ServerCenterWebSocketController {
         LogFactory.get().info("欢迎:"+sid+",当前在线人数为" + getOnlineCount());
         this.sid=sid;
         try {
-            ServerInfo serverInfo = new ServerInfo();
+            /*ServerInfo serverInfo = new ServerInfo();
             while (true){
                 serverInfo.setPassListCount(PublicVariable.passCount);
                 if (PublicVariable.passCount>0){
@@ -62,8 +69,9 @@ public class ServerCenterWebSocketController {
                 } catch (InterruptedException e) {
                     return;
                 }
-            }
-        } catch (IOException e) {
+            }*/
+            LogFactory.get().info("websocket");
+        } catch (Exception e) {
             LogFactory.get().error("websocket IO异常");
         }
     }
@@ -99,8 +107,8 @@ public class ServerCenterWebSocketController {
 
     /**
      *
-     * @param session
-     * @param error
+     * @param session session
+     * @param error error
      */
     @OnError
     public void onError(Session session, Throwable error) {
@@ -112,6 +120,7 @@ public class ServerCenterWebSocketController {
     }
     /**
      * 实现服务器主动推送
+     * @param message message
      */
     public void sendMessage(Result message) throws IOException {
         this.session.getBasicRemote().sendText(message.toString());
@@ -133,6 +142,28 @@ public class ServerCenterWebSocketController {
                 continue;
             }
         }
+    }
+
+    /**
+     * 群发用户行为消息
+     * */
+    static Long timeNum = 0L;
+    public static void sendUserWorkInfo(String message) throws IOException {
+        if ((System.currentTimeMillis()-timeNum)>2000){
+            for (ServerCenterWebSocketController item : webSocketSet) {
+                try {
+                    //这里可以设定只推送给这个sid的，为null则全部推送
+                    LogFactory.get().info(message);
+                    item.sendMessage(ResultGenerator.genUserWorkMessage(message));
+                } catch (IOException e) {
+                    continue;
+                }
+            }
+            timeNum = System.currentTimeMillis();
+        }else {
+            return;
+        }
+
     }
 
     /**

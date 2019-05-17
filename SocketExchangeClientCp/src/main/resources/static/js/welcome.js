@@ -1,6 +1,10 @@
  var ws = new ReconnectingWebSocket(baseAjaxURLWs+'client/test2');
+ var serverWs;
+
  var consoles = new Array();
  var maxConsoles = 100;
+ var serverMes = new Array();
+ var maxServerMes = 100;
  var layer;
  var usrId = '';
  var usrName = '';
@@ -12,6 +16,8 @@
  layui.use('layer', function(){
   layer = layui.layer;
 });  
+
+ 
  
  ws.onopen = function() {
      console.log('open');
@@ -88,6 +94,8 @@
      console.log('close');
  };
  
+ 
+ 
  function setUser(){
 	 layer.open({
 				  type: 1,
@@ -115,6 +123,17 @@
 	document.getElementById('userPwd').value=usrPwd;
 	 //layer.msg('hello');
  }
+ 
+ //服务器消息处理
+	 
+ function formatServerMes(data){
+	 if(data.type=='SYSTEM-USERMES'){
+		return '<span style="color:#9A9A9A;">'+data.time +' </span><span class="layui-badge layui-bg-cyan layuiadmin-badge">'+data.message+'</span><br>'
+	 }else{
+		return "";
+	 }
+ }
+ 
  
  //控制台日志颜色处理
  function formatConsole(message){
@@ -233,7 +252,37 @@ function onload(){
 					usrId = response.data.userId;
 					usrName = response.data.userName;
 					usrPwd = response.data.userPwd;
+					serverWs = new ReconnectingWebSocket(baseAjaxURLServerWs+'server/测试'+usrName);
+					serverWs.onopen = function() {
+						console.log('connect server');
+					};
 					
+					serverWs.onmessage = function(data) {
+					var data = JSON.parse(data.data);
+					if(data.type=='SYSTEM-USERMES'){
+						
+						var mes = formatServerMes(data)
+						
+						//自动清理过长的日志
+						if(serverMes.length>=maxServerMes){
+							for(var i=0;i<serverMes.length-1;i++){
+								serverMes[i]=serverMes[i+1];
+							}
+							serverMes[serverMes.length-1]=mes;
+						}else{
+						serverMes.push(mes);
+						}
+						
+						var serverMesStr = '';
+						for(var i=0;i<serverMes.length;i++){
+							serverMesStr+=serverMes[i];
+						}
+						
+						document.getElementById("serverWindow").innerHTML = serverMesStr;
+						//自动滚到最底部
+						document.getElementById("serverWindow").scrollTop = document.getElementById("serverWindow").scrollHeight;
+					}
+					};
 				}
 			}
 		);

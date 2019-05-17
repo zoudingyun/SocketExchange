@@ -44,11 +44,12 @@ public class ServerDispatcher implements Runnable {
     public void run() {
         if (serverState){
             try{
+                LogFactory.get().info("server:"+serverAddress+":"+serverPort);
                 Socket targetSocket = new Socket(serverAddress,serverPort);
                 RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
                 requestInfoPojo.setTargetIp(remoteAdd);
                 requestInfoPojo.setTargetPort(remotePort);
-                requestInfoPojo.setUserName(userInfo.getUserId());
+                requestInfoPojo.setUserId(userInfo.getUserId());
                 requestInfoPojo.setUserPwd(userInfo.getUserPwd());
                 JSONObject jsonObject = JSONUtil.parseObj(requestInfoPojo);
 
@@ -76,6 +77,7 @@ public class ServerDispatcher implements Runnable {
                     }
                 }else {
                     LogFactory.get().error(reJsonObject.getStr("message"));
+                    requestSocket.close();
                 }
             }catch (Exception ex){
                 LogFactory.get().error(ex);

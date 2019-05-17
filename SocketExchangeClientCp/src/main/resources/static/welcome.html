@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="./css/login.css">
         <link rel="stylesheet" href="./css/xadmin.css">
 		<script src="common/host.js"></script>
+		<script src="common/jquery/jquery-1.9.1.min.js"></script>
 		<script src="common/reconnecting-websocket-master/reconnecting-websocket.min.js"></script>
 		<script type="text/javascript" src="common/scrollbot-master/src/scrollbot.min.js"></script>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
@@ -102,8 +103,8 @@
                     <div class="layui-card">
                         <div class="layui-card-header">服务器信息
                             <span class="layui-badge layui-bg-cyan layuiadmin-badge">上次加载</span>
-												</div>
-                        <div id="serverWindow" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
+						</div>
+							<div id="serverWindow" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
                         </div>
                     </div>
                 </div>
@@ -111,9 +112,9 @@
                     <div class="layui-card">
                         <div class="layui-card-header">客户端信息
                             <span class="layui-badge layui-bg-cyan layuiadmin-badge">在线</span>
-												</div>
-												<div id="console" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
-												</div>
+						</div>
+							<div id="console" style="width: calc(100% - 10px);margin-left: 5px;height: 250px;overflow: auto;">
+						</div>
                         <!-- <div class="layui-card-body ">
                             <p class="layuiadmin-big-font">33,555</p>
                             <p>新下载
