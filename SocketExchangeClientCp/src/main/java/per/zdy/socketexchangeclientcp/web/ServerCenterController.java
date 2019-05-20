@@ -112,17 +112,17 @@ public class ServerCenterController {
     @CrossOrigin
     public Result saveUser(@RequestBody UserInfo userInfo) {
         try{
+            String name = signIn(userInfo);
+            userInfo.setUserName(name);
             serverCenterService.saveUser(userInfo);
-            signIn();
+
             return ResultGenerator.genSuccessResult();
         }catch (Exception ex){
             return ResultGenerator.genFailResult(ex.getMessage());
         }
     }
 
-    private String signIn() throws Exception{
-
-        UserInfo userInfo = serverCenterService.queryUser();
+    private String signIn(UserInfo userInfo) throws Exception{
 
         Socket targetSocket = new Socket(serverAddress,serverPort);
         RequestInfoPojo requestInfoPojo = new RequestInfoPojo();
@@ -146,12 +146,10 @@ public class ServerCenterController {
         JSONObject reJsonObject = JSONUtil.parseObj(sb);
         if (!reJsonObject.get("userName").toString().equals("")){
             userInfo.setUserName(reJsonObject.get("userName").toString());
-            serverCenterService.saveUser(userInfo);
             return reJsonObject.get("userName").toString();
         }else {
             userInfo.setUserName("null");
-            serverCenterService.saveUser(userInfo);
-            return null;
+            return "null";
         }
 
     }
